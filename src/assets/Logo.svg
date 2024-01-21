@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="266.682" height="195.111" viewBox="0 0 266.682 195.111">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.976" y1="0.5" x2="0.06" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ff81f2"/>
+      <stop offset="0.324" stop-color="#9225fd"/>
+      <stop offset="0.498" stop-color="#8318fe"/>
+      <stop offset="0.678" stop-color="#7426fa"/>
+      <stop offset="1" stop-color="#578ee1"/>
+    </linearGradient>
+  </defs>
+  <g id="Group_131" data-name="Group 131" transform="translate(-1196.05 -2523.178)">
+    <g id="Group_130" data-name="Group 130" transform="translate(1196.05 2523.678)">
+      <path id="Path_307" data-name="Path 307" d="M1396.334,0l-39.485,64.87L1325.825,96.46l29.332,32.434,40.9,65.717h59.229l-68.537-99L1454.718,0Z" transform="translate(-1256.159 -0.001)" fill="url(#linear-gradient)"/>
+      <path id="Path_308" data-name="Path 308" d="M1414.7,64.871,1378.036,0h-59.23l64.872,96.459-69.666,98.151h61.2l37.794-65.717,31.588-33.28Z" transform="translate(-1314.011 -0.001)" fill="url(#linear-gradient)"/>
+    </g>
+    <g id="Group_132" data-name="Group 132">
+      <path id="Path_309" data-name="Path 309" d="M1407.935,2523.678h54.8" fill="none" stroke="#9124fd" stroke-width="1"/>
+      <path id="Path_310" data-name="Path 310" d="M1407.935,2523.678h65.125" transform="translate(-10.329 16)" fill="none" stroke="#9124fd" stroke-width="1"/>
+      <path id="Path_313" data-name="Path 313" d="M1407.935,2523.678h85.083" transform="translate(-30.287 48)" fill="none" stroke="#9124fd" stroke-width="1"/>
+      <path id="Path_315" data-name="Path 315" d="M1407.935,2523.678h120.271" transform="translate(-65.475 96)" fill="none" stroke="#9124fd" stroke-width="1"/>
+      <path id="Path_311" data-name="Path 311" d="M1407.935,2523.678h75.279" transform="translate(-20.483 32)" fill="none" stroke="#9124fd" stroke-width="1"/>
+      <path id="Path_316" data-name="Path 316" d="M1407.935,2523.678h107.316" transform="translate(-52.52 80)" fill="none" stroke="#9124fd" stroke-width="1"/>
+      <path id="Path_312" data-name="Path 312" d="M1407.935,2523.678h96.637" transform="translate(-41.841 64)" fill="none" stroke="#9124fd" stroke-width="1"/>
+    </g>
+  </g>
+</svg>

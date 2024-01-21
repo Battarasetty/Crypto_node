@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="45.679" height="45.679" viewBox="0 0 45.679 45.679">
+  <g id="ic_notifications" style="mix-blend-mode: normal;isolation: isolate">
+    <path id="Bounds" d="M45.679,0V45.679H0V0Z" fill="none" style="mix-blend-mode: normal;isolation: isolate"/>
+    <path id="Shape" d="M16,39a3.838,3.838,0,0,1-3.764-3.9h7.53A3.839,3.839,0,0,1,16,39Zm16-5.849H0V31.2l3.764-3.9V16.574A12.541,12.541,0,0,1,13.177,4.251V2.926a2.825,2.825,0,1,1,5.646,0V4.251a12.543,12.543,0,0,1,9.412,12.324V27.3L32,31.2v1.95Z" transform="translate(6.126 3.264)" fill="#9da1b2" style="mix-blend-mode: normal;isolation: isolate"/>
+  </g>
+</svg>

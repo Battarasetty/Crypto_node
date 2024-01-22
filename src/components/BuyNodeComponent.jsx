@@ -18,7 +18,6 @@ import {
   setAccount,
   setProvider,
   setUserBalance,
-  disconnectWallet,
 } from "../redux/wallet/walletSlice.js";
 
 const PriceControls = ({ quantity, onIncrement, onDecrement }) => {
@@ -87,6 +86,10 @@ const BuyNodeComponent = () => {
   const [amount, setAmount] = useState(1000);
   const [recipientError, setRecipientError] = useState("");
   const [amountError, setAmountError] = useState("");
+  const [referralBonus, setReferralBonus] = useState(0);
+  // console.log(referralBonus);
+  const [remainingAmount, setRemainingAmount] = useState(0);
+  // console.log(remainingAmount)
 
   const handleConnectWallet = async () => {
     try {
@@ -109,7 +112,7 @@ const BuyNodeComponent = () => {
 
       localStorage.setItem("connectedAccount", selectedAccount);
 
-      // await transferUSDT(recipient, amount, newProvider, selectedAccount);
+      await transferUSDT(recipient, remainingAmount, newProvider, selectedAccount);
 
       navigate("/home");
     } catch (error) {
@@ -149,7 +152,14 @@ const BuyNodeComponent = () => {
 
   const handleProceed = () => {
     if (checkBoxes.terms1 && checkBoxes.terms2 && checkBoxes.terms3) {
-      // navigate("/connect-wallet");
+      const totalAmount = amount ;
+
+      const calculatedReferralBonus = 0.2 * totalAmount;
+
+      const calculatedRemainingAmount = totalAmount - calculatedReferralBonus;
+
+      setReferralBonus(calculatedReferralBonus);
+      setRemainingAmount(calculatedRemainingAmount);
       setStep(2);
     } else {
       console.log("Please check all checkboxes before proceeding.");
@@ -305,7 +315,12 @@ const BuyNodeComponent = () => {
       {step === 1 && (
         <button
           onClick={handleProceed}
-          className="uppercase w-[450px] py-2 rounded-lg text-[20px] font-semibold focus:outline-none bg-gradient-to-r from-[#FE81F3] via-[#568EE1] to-[#8419FE] text-white hover:from-[#2B2E80] hover:via-[#2B2E80] hover:to-[#A970F3]"
+          className={`uppercase w-[450px] py-2 rounded-lg text-[20px] font-semibold focus:outline-none ${
+            !Object.values(checkBoxes).every((isChecked) => isChecked)
+              ? "bg-[#888888] text-[#CCCCCC] cursor-not-allowed"
+              : "bg-gradient-to-r from-[#FE81F3] via-[#568EE1] to-[#8419FE] text-white hover:from-[#2B2E80] hover:via-[#2B2E80] hover:to-[#A970F3]"
+          }`}
+          disabled={!Object.values(checkBoxes).every((isChecked) => isChecked)}
         >
           Proceed
         </button>

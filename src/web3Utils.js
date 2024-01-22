@@ -24,7 +24,7 @@ export const USDT_ABI = [
 export const USDT_ADDRESS = "0x6230Be17697536128bc80302064F790524644D10";
 
 export const transferUSDT = async (recipient, amount, provider, account) => {
-  console.log(recipient, amount);
+  // console.log(recipient, amount);
   // Validate the recipient's address
   if (!ethers.utils.isAddress(recipient)) {
     alert("Please enter a valid Ethereum address.");
@@ -51,7 +51,7 @@ export const transferUSDT = async (recipient, amount, provider, account) => {
   // console.log(contractWithSigner)
   // USDT has 6 decimal places, so we multiply the amount by 1e6 to get the actual amount
   const actualAmount = ethers.utils.parseUnits(amount.toString(), 6);
-  // console.log(actualAmount)
+  console.log(actualAmount)
   // Call the transfer function
   const tx = await contractWithSigner.transfer(recipient, actualAmount);
   // console.log(tx)

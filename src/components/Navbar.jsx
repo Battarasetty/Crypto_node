@@ -8,10 +8,31 @@ import {
   Arrow_down,
   toggle_effect,
 } from "../assets/";
+import {
+  DarkMode,
+  LightMode,
+} from "@mui/icons-material";
+import {
+  Box,
+  IconButton,
+  InputBase,
+  Typography,
+  Select,
+  MenuItem,
+  FormControl,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 // import ConnectWalletModal from "../../components/ConnectWalletModal";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { disconnectWallet, setAccount, setProvider, setUserBalance } from "../redux/wallet/walletSlice";
+import {
+  disconnectWallet,
+  setAccount,
+  setProvider,
+  setUserBalance,
+  setMode
+} from "../redux/wallet/walletSlice";
 // import { useSelector } from "react-redux";
 // import { WhiteListModal } from "../../components";
 // import { SwipeableDrawer } from "@mui/material";
@@ -36,31 +57,18 @@ const Navbar = () => {
     (state) => state.wallet
   );
 
+  // const theme = useTheme();
+  // const neutralLight = theme.palette.neutral.light;
+  // const dark = theme.palette.neutral.dark;
+  // const background = theme.palette.background.default;
+  // const primaryLight = theme.palette.primary.light;
+  // const alt = theme.palette.background.alt;
+
+
   const handleDisconnect = async () => {
     try {
-      const { ethereum } = window;
-
-      if (!ethereum) {
-        // Handle the case where Metamask is not installed or not available
-        return;
-      }
-
-      // Disconnect Metamask by requesting an empty array of accounts
-      await ethereum.request({
-        method: "eth_requestAccounts",
-        params: [],
-      });
-
-      // Dispatch Redux actions to update the state
       dispatch(disconnectWallet());
-      dispatch(setAccount("Not connected"));
-      dispatch(setProvider(null));
-      dispatch(setUserBalance(null));
 
-      // Remove the connected account from local storage
-      localStorage.removeItem("connectedAccount");
-
-      // Redirect or perform additional cleanup as needed
       navigate("/");
     } catch (error) {
       console.error("Error disconnecting wallet:", error);

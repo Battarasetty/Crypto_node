@@ -3,16 +3,26 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ConnectWalletComponent from './components/ConnectWalletComponent';
 import BuyNodeComponent from './components/BuyNodeComponent';
 import Home from './pages/Home.jsx';
+import { useMemo } from 'react';
+import { UseSelector, useSelector } from 'react-redux';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
+import { themeSettings } from './theme.js';
 
 const App = () => {
+  const mode = useSelector((state) => state.mode);
+  const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<BuyNodeComponent />} />
-        {/* <Route path="/connect-wallet" element={<ConnectWalletComponent />} /> */}
-        <Route path="/home" element={<Home />} />
-      </Routes>
-    </Router>
+    // <ThemeProvider theme={theme}>
+    //   <CssBaseline />
+      <Router>
+        <Routes>
+          <Route path="/" element={<BuyNodeComponent />} />
+          {/* <Route path="/connect-wallet" element={<ConnectWalletComponent />} /> */}
+          <Route path="/home" element={<Home />} />
+        </Routes>
+      </Router>
+    // </ThemeProvider>
   );
 };
 

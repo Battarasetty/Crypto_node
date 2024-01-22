@@ -10,6 +10,8 @@ import {
 } from "../assets/";
 // import ConnectWalletModal from "../../components/ConnectWalletModal";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { disconnectWallet, setAccount, setProvider, setUserBalance } from "../redux/wallet/walletSlice";
 // import { useSelector } from "react-redux";
 // import { WhiteListModal } from "../../components";
 // import { SwipeableDrawer } from "@mui/material";
@@ -23,12 +25,47 @@ const Navbar = () => {
   const [arrowRotation2, setArrowRotation2] = useState(0);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isDropdownOpen2, setDropdownOpen2] = useState(false);
-
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  //   const [isWhitelistModalOpen, setWhitelistModalOpen] = useState(false);
   const [drawerState, setDrawerState] = useState({
     left: false,
   });
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { account, provider, userBalance } = useSelector(
+    (state) => state.wallet
+  );
+
+  const handleDisconnect = async () => {
+    try {
+      const { ethereum } = window;
+
+      if (!ethereum) {
+        // Handle the case where Metamask is not installed or not available
+        return;
+      }
+
+      // Disconnect Metamask by requesting an empty array of accounts
+      await ethereum.request({
+        method: "eth_requestAccounts",
+        params: [],
+      });
+
+      // Dispatch Redux actions to update the state
+      dispatch(disconnectWallet());
+      dispatch(setAccount("Not connected"));
+      dispatch(setProvider(null));
+      dispatch(setUserBalance(null));
+
+      // Remove the connected account from local storage
+      localStorage.removeItem("connectedAccount");
+
+      // Redirect or perform additional cleanup as needed
+      navigate("/");
+    } catch (error) {
+      console.error("Error disconnecting wallet:", error);
+    }
+  };
 
   const mockDataToken = [
     {
@@ -50,6 +87,14 @@ const Navbar = () => {
 
   const dropdownRef = useRef(null);
   const dropdownRef2 = useRef(null);
+
+  useEffect(() => {
+    // Check for connected wallet in local storage when component mounts
+    const storedAccount = localStorage.getItem("connectedAccount");
+    if (storedAccount) {
+      setWalletAddress(storedAccount);
+    }
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -74,88 +119,87 @@ const Navbar = () => {
     };
   }, [isDropdownOpen, isDropdownOpen2]);
 
-  const navigate = useNavigate();
   //   const whitelist = useSelector((state) => state.whitelist.whitelist);
 
-  const connectWallet = async () => {
-    if (
-      typeof window !== "undefined" &&
-      typeof window.ethereum !== "undefined"
-    ) {
-      try {
-        // Metamask is installed
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
+  // const connectWallet = async () => {
+  //   if (
+  //     typeof window !== "undefined" &&
+  //     typeof window.ethereum !== "undefined"
+  //   ) {
+  //     try {
+  //       // Metamask is installed
+  //       const accounts = await window.ethereum.request({
+  //         method: "eth_requestAccounts",
+  //       });
 
-        // Set the wallet address
-        setWalletAddress(accounts[0]);
+  //       // Set the wallet address
+  //       setWalletAddress(accounts[0]);
 
-        // Trigger handleConnectWallet function
-        handleConnectWallet();
+  //       // Trigger handleConnectWallet function
+  //       handleConnectWallet();
 
-        console.log(accounts[0]);
-      } catch (error) {
-        console.error(error.message);
-      }
-    } else {
-      // Metamask is not installed
-      console.log("please install Metamask");
-    }
-  };
+  //       console.log(accounts[0]);
+  //     } catch (error) {
+  //       console.error(error.message);
+  //     }
+  //   } else {
+  //     // Metamask is not installed
+  //     console.log("please install Metamask");
+  //   }
+  // };
 
-  const getCurrentWalletConnected = async () => {
-    if (
-      typeof window !== "undefined" &&
-      typeof window.ethereum !== "undefined"
-    ) {
-      try {
-        const accounts = await window.ethereum.request({
-          method: "eth_accounts",
-        });
-        if (accounts.length > 0) {
-          setWalletAddress(accounts[0]);
-          console.log(accounts[0]);
-        } else {
-          console.log("Connect the metamask using Connect Button");
-        }
-      } catch (error) {
-        console.error(error.message);
-      }
-    } else {
-      // Metamask is not installed
-      console.log("please install Metamask");
-    }
-  };
+  // const getCurrentWalletConnected = async () => {
+  //   if (
+  //     typeof window !== "undefined" &&
+  //     typeof window.ethereum !== "undefined"
+  //   ) {
+  //     try {
+  //       const accounts = await window.ethereum.request({
+  //         method: "eth_accounts",
+  //       });
+  //       if (accounts.length > 0) {
+  //         setWalletAddress(accounts[0]);
+  //         console.log(accounts[0]);
+  //       } else {
+  //         console.log("Connect the metamask using Connect Button");
+  //       }
+  //     } catch (error) {
+  //       console.error(error.message);
+  //     }
+  //   } else {
+  //     // Metamask is not installed
+  //     console.log("please install Metamask");
+  //   }
+  // };
 
-  useEffect(() => {
-    getCurrentWalletConnected();
-    addWalletListener();
+  // useEffect(() => {
+  //   getCurrentWalletConnected();
+  //   addWalletListener();
 
-    // Attach event listener
-    window.addEventListener("resize", handleResize);
+  //   // Attach event listener
+  //   window.addEventListener("resize", handleResize);
 
-    // Cleanup event listener on component unmount
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  //   // Cleanup event listener on component unmount
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, []);
 
-  const addWalletListener = async () => {
-    if (
-      typeof window !== "undefined" &&
-      typeof window.ethereum !== "undefined"
-    ) {
-      window.ethereum.on("accountsChanged", (accounts) => {
-        setWalletAddress(accounts[0]);
-        console.log(accounts[0]);
-      });
-    } else {
-      // Metamask is not installed
-      setWalletAddress("");
-      console.log("please install Metamask");
-    }
-  };
+  // const addWalletListener = async () => {
+  //   if (
+  //     typeof window !== "undefined" &&
+  //     typeof window.ethereum !== "undefined"
+  //   ) {
+  //     window.ethereum.on("accountsChanged", (accounts) => {
+  //       setWalletAddress(accounts[0]);
+  //       console.log(accounts[0]);
+  //     });
+  //   } else {
+  //     // Metamask is not installed
+  //     setWalletAddress("");
+  //     console.log("please install Metamask");
+  //   }
+  // };
 
   //   const handleWhitelistClick = () => {
   //     setWhitelistModalOpen(true);
@@ -190,33 +234,6 @@ const Navbar = () => {
     setArrowRotation2(0);
   };
 
-  const options = ["Pool Participants", "Pool Creator"];
-
-  const handleConnectWallet = () => {
-    setOpenModal(true);
-    console.log("Connect Wallet clicked");
-  };
-
-  const handleClose = () => {
-    setOpenModal(false);
-  };
-
-  const handlePoolCreatorClick = () => {
-    console.log("Redirecting to Pool Creator");
-    navigate("/pool-creator");
-    handleClose();
-  };
-
-  const handlePoolParticipantClick = () => {
-    console.log("Redirecting to Pool Participant");
-    navigate("/pool-participant");
-    handleClose();
-  };
-
-  const handleResize = () => {
-    setIsMobile(window.innerWidth <= 768);
-  };
-
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event &&
@@ -227,68 +244,6 @@ const Navbar = () => {
     }
     setDrawerState({ ...drawerState, [anchor]: open });
   };
-
-  const list = (anchor) => (
-    <div
-      className=""
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <div className="flex items-end justify-end cursor-pointer">
-        <img
-          src={clear}
-          alt="cross_icon"
-          className="w-8 h-8 cursor-pointer"
-          onClick={toggleDrawer(anchor, false)}
-        />{" "}
-      </div>
-      <div className="w-[100vw] max-w-[300px]">
-        <div className="flex justify-center items-center p-4">
-          <div className="flex items-center cursor-pointer justify-center mr-20 relative">
-            <img src={Logo} alt="" className="w-10 h-10 " />
-            <span className="text-sm font-medium text-[#3840CD] absolute top-[68px] left-[125px]">
-              BULL RUN
-            </span>
-          </div>
-        </div>
-        <ul className="flex flex-col cursor-pointer items-center space-y-12 p-4">
-          {mockDataToken.map((item) => (
-            <li
-              key={item.id}
-              className="flex gap-2 items-center text-sm text-gray-500"
-            >
-              <span>{item.token}:</span>
-              <span className="text-blue-500">{item.value.toFixed(4)}</span>
-            </li>
-          ))}
-        </ul>
-        <div className="flex flex-col cursor-pointer items-center space-y-12 p-4 mt-5">
-          <div
-            className="flex items-center space-x-2 cursor-pointer transform transition-transform hover:scale-110"
-            // onClick={handleWhitelistClick}
-          >
-            <img src={Favorite} alt="Favorite Icon" className="w-4 h-4" />
-            <p className="text-sm text-[#202020]">Whitelist</p>
-          </div>
-          <div className="flex items-center space-x-2">
-            <img src={pie} alt="Pie Icon" className="w-4 h-4" />
-            <p className="text-sm">Portfolio</p>
-          </div>
-          <div className="relative">
-            <img
-              src={hasNotifications ? Notification_bold : Notification}
-              alt="Notification Icon"
-              className="w-6 h-6"
-            />
-            {hasNotifications && (
-              <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <>
@@ -489,26 +444,23 @@ const Navbar = () => {
               </div>
 
               {/* Connect Wallet */}
-              <button
-                className={`p-2 border-none border-2 rounded-lg bg-blue-500 text-white ${
-                  isMobile ? "rounded-full" : ""
-                }`}
-                onClick={connectWallet}
-              >
-                {isMobile
-                  ? walletAddress && walletAddress.length > 0
-                    ? walletAddress.substring(0, 6) +
-                      "..." +
-                      walletAddress.substring(38)
-                    : "Connect"
-                  : walletAddress && walletAddress.length > 0
-                  ? `Connected: ${walletAddress.substring(
-                      0,
-                      6
-                    )}...${walletAddress.substring(38)}`
-                  : "Connect Wallet"}
-              </button>
-
+              <div className="text-white">
+                <button
+                  className={`p-1.5 border-none border-2 rounded-lg bg-blue-500 text-white ${
+                    isMobile ? "rounded-full" : ""
+                  }`}
+                  onClick={handleDisconnect}
+                >
+                  {walletAddress ? (
+                    <>
+                      <span>{walletAddress.slice(0, 6)}</span> ...
+                      <span>{walletAddress.slice(-6)}</span>{" "}
+                    </>
+                  ) : (
+                    "Connect Wallet"
+                  )}
+                </button>
+              </div>
               <div>
                 <img
                   src={toggle_effect}

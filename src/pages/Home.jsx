@@ -12,7 +12,15 @@ import {
   right_3,
   right_4,
 } from "../assets";
-import { Box, Button, Tab, Tabs } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Tab,
+  Tabs,
+  useTheme,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 
 const Home = () => {
@@ -106,9 +114,7 @@ const Home = () => {
     { field: "rewards", headerName: "Rewards", width: 150 },
   ];
 
-  const CustomCell = ({ value }) => (
-    <div style={{ color: "white" }}>{value}</div>
-  );
+  const CustomCell = ({ value }) => <div style={{ color: dark }}>{value}</div>;
 
   const [rowsToShow, setRowsToShow] = useState(4); // Number of rows to show initially
 
@@ -127,30 +133,52 @@ const Home = () => {
     }
   };
 
+  const theme = useTheme();
+  // console.log(theme.palette.mode);
+  const neutralLight = theme.palette.neutral.light;
+  const dark = theme.palette.neutral.dark;
+  const background = theme.palette.background.default;
+  const primaryLight = theme.palette.primary.light;
+  const alt = theme.palette.background.alt;
+
   return (
-    <div className="h-screen overflow-auto">
+    <div className="h-screen overflow-auto" style={{ background: alt }}>
       <Navbar />
-      <div className="mt-10">
+      <div className="sm:my-7">
         <div className="p-4 flex flex-col items-center">
-          <h1 className="text-3xl font-bold text-white">
+          <h1
+            className="text-[15px] md:text-3xl font-bold text-white"
+            style={{ color: dark }}
+          >
             <span className="text-[#5763F3]">Congratulations</span> on your Node
             Purchase
           </h1>
-          <p className="text-[14px] text-white">
+          <p
+            className="flex items-center justify-center text-md text-[14px] text-white"
+            style={{ color: dark }}
+          >
             Your first step towards financial freedom is to invest in yourself,
             through X Bull Run.
           </p>
         </div>
-        <div className="flex justify-center py-4">
+
+        <div className="flex flex-col gap-5 md:flex-row justify-center py-4 px-4">
+          {" "}
           {/* Left Box */}
-          <div className="mx-4">
-            <h2 className="text-lg  text-[#C2C1CA]">Personal</h2>
-            <div
-              className="bg-[#151447] py-6 px-12 rounded-md shadow-md"
-              style={{
-                boxShadow: "0px 4px 8px rgba(21, 20, 71, 0.2)",
+          <Card
+            sx={{
+              minWidth: 275,
+              boxShadow: "0px 4px 8px rgba(21, 20, 71, 0.2)",
+              width: "100%", // Full width on small screens
+              maxWidth: "530px", // Limit maximum width on larger screens
+              // margin: "0 auto", // Center the card horizontally
+            }}
+          >
+            <CardContent
+              sx={{
+                backgroundColor: primaryLight,
                 height: "350px", // Set your desired height
-                width: "530px", // Set your desired width
+                width: "100%", // Full width on small screens
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
@@ -173,37 +201,48 @@ const Home = () => {
               <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
                 <div className="flex items-center gap-10">
                   <img src={left_3} alt="Left 3" className="w-10 h-10" />
-                  <span className="text-[#5763F3]">MY FOUNDER'S NODES</span>
+                  <span className="text-[#5763F3]">UNCLAIMED XBR REWARDS</span>
                 </div>
-                <span className="text-white">01</span>
+                <span className="text-white">0.0145</span>
               </div>
               <div className="flex items-center justify-between pb-2 border-b border-[#080628]">
                 <div className="flex items-center gap-10">
                   <img src={left_4} alt="Left 4" className="w-10 h-10" />
-                  <span className="text-[#5763F3]">MY FOUNDER'S NODES</span>
+                  <span className="text-[#5763F3]">REFERRAL EARNINGS</span>
                 </div>
-                <span className="text-white">01</span>
+                <span className="text-white">$600.00</span>
               </div>
               <div className="flex justify-center mt-6">
-                <button className="bg-[#22246A] text-[#5763F3] px-6 rounded-l-full">
+                <button
+                  className="bg-[#22246A] text-[#5763F3] px-6 rounded-l-full"
+                  style={{ background: neutralLight }}
+                >
                   Mint & Claim
                 </button>
-                <button className="bg-[#22246A] text-[#5763F3] py-2 px-4 rounded-r-full ml-2">
+                <button
+                  className="bg-[#22246A] text-[#5763F3] py-2 px-4 rounded-r-full ml-2"
+                  style={{ background: neutralLight }}
+                >
                   Sell a Node
                 </button>
               </div>
-            </div>
-          </div>
-
+            </CardContent>
+          </Card>
           {/* Right Box */}
-          <div className="mx-4">
-            <h2 className="text-lg text-[#C2C1CA]">Global</h2>
-            <div
-              className="bg-[#151447] py-6 px-12 rounded-md shadow-md"
-              style={{
-                boxShadow: "0px 4px 8px rgba(21, 20, 71, 0.2)",
+          <Card
+            sx={{
+              minWidth: 275,
+              boxShadow: "0px 4px 8px rgba(21, 20, 71, 0.2)",
+              width: "100%", // Full width on small screens
+              maxWidth: "530px", // Limit maximum width on larger screens
+              // margin: "0 auto", // Center the card horizontally
+            }}
+          >
+            <CardContent
+              sx={{
+                backgroundColor: primaryLight,
                 height: "350px", // Set your desired height
-                width: "530px", // Set your desired width
+                width: "100%", // Full width on small screens
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
@@ -211,39 +250,48 @@ const Home = () => {
             >
               <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
                 <div className="flex items-center gap-10">
-                  <img src={right_1} alt="Right 1" className="w-10 h-10" />
-                  <span className="text-[#5763F3]">GLOBEL FOUNDER'S NODES</span>
+                  <img src={left_1} alt="Left 1" className="w-10 h-10" />
+                  <span className="text-[#5763F3]">MY FOUNDER'S NODES</span>
                 </div>
                 <span className="text-white">01</span>
               </div>
               <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
                 <div className="flex items-center gap-10">
-                  <img src={right_2} alt="Right 2" className="w-10 h-10" />
+                  <img src={left_2} alt="Left 2" className="w-10 h-10" />
                   <span className="text-[#5763F3]">XBR REWARDS</span>
                 </div>
                 <span className="text-white">0.0358</span>
               </div>
               <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
                 <div className="flex items-center gap-10">
-                  <img src={right_3} alt="Right 3" className="w-10 h-10" />
-                  <span className="text-[#5763F3]">MY FOUNDER'S NODES</span>
+                  <img src={left_3} alt="Left 3" className="w-10 h-10" />
+                  <span className="text-[#5763F3]">UNCLAIMED XBR REWARDS</span>
                 </div>
-                <span className="text-white">01</span>
+                <span className="text-white">0.0145</span>
               </div>
               <div className="flex items-center justify-between pb-2 border-b border-[#080628]">
                 <div className="flex items-center gap-10">
-                  <img src={right_4} alt="Right 4" className="w-10 h-10" />
-                  <span className="text-[#5763F3]">MY FOUNDER'S NODES</span>
+                  <img src={left_4} alt="Left 4" className="w-10 h-10" />
+                  <span className="text-[#5763F3]">REFERRAL EARNINGS</span>
                 </div>
-                <span className="text-white">01</span>
+                <span className="text-white">$600.00</span>
               </div>
               <div className="flex justify-center mt-6">
-                <button className="bg-[#22246A] text-[#5763F3] py-2 px-4 rounded-full">
-                  Buy a Node
+                <button
+                  className="bg-[#22246A] text-[#5763F3] px-6 rounded-l-full"
+                  style={{ background: neutralLight }}
+                >
+                  Mint & Claim
+                </button>
+                <button
+                  className="bg-[#22246A] text-[#5763F3] py-2 px-4 rounded-r-full ml-2"
+                  style={{ background: neutralLight }}
+                >
+                  Sell a Node
                 </button>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Centered Tabs Box */}
@@ -254,8 +302,8 @@ const Home = () => {
               onChange={handleChange}
               aria-label="basic tabs example"
             >
-              <Tab label="Personal" sx={{ color: "#5763F3" }} />
-              <Tab label="Global" sx={{ color: "#5763F3" }} />
+              <Tab label="Reward History" sx={{ color: "#5763F3" }} />
+              <Tab label="Referral's Claims" sx={{ color: "#5763F3" }} />
             </Tabs>
           </Box>
         </div>
@@ -274,8 +322,8 @@ const Home = () => {
                   borderBottom: "none", // Remove bottom border for cells
                 },
                 "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: "#171535", // Set the desired color
-                  color: "white",
+                  backgroundColor: alt, // Set the desired color
+                  color: dark,
                   border: "none",
                 },
                 "& .MuiDataGrid-virtualScroller": {
@@ -307,7 +355,7 @@ const Home = () => {
                   variant="contained"
                   color="primary"
                   onClick={handleViewMore}
-                  sx={{ marginBottom: "20px" }}
+                  sx={{ marginBottom: "20px", background: neutralLight }}
                 >
                   View More
                 </Button>
@@ -320,30 +368,31 @@ const Home = () => {
           <div>
             <Box
               style={{ height: 295, width: "71vw", margin: "auto" }}
+              className="text-white"
               sx={{
                 "& .MuiDataGrid-root": {
                   border: "none",
                   borderRadius: "5rem",
                 },
                 "& .MuiDataGrid-cell": {
-                  borderBottom: "none", // Remove bottom border for cells
+                  borderBottom: "none",
                 },
                 "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: "#171535", // Set the desired color
-                  color: "white",
+                  backgroundColor: alt,
+                  color: dark,
                   border: "none",
                 },
                 "& .MuiDataGrid-virtualScroller": {
                   backgroundColor: "none",
                 },
                 "& .MuiDataGrid-footerContainer": {
-                  display: "none", // Hide the entire footer container
+                  display: "none",
                 },
                 "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
                   color: "#ffedc2 !important",
                 },
                 "& .MuiPaginationItem-root": {
-                  color: "#ffedc2", // Set the desired pagination item color
+                  color: "#ffedc2",
                 },
               }}
             >
@@ -353,7 +402,7 @@ const Home = () => {
                   ...column,
                   renderCell: (params) => <CustomCell {...params} />,
                 }))}
-                // pageSize={4} // Show only 4 rows initially
+                // pageSize={4}
               />
             </Box>
             {globalData.length > rowsToShow && (

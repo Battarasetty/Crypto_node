@@ -1,10 +1,25 @@
 import React from "react";
 import { subscribe_image } from "../assets";
+import { useTheme } from "@mui/material";
 
 const EmailComponent = () => {
+  const theme = useTheme();
+  // console.log(theme.palette.mode);
+  const neutralLight = theme.palette.neutral.light;
+  const dark = theme.palette.neutral.dark;
+  const background = theme.palette.background.default;
+  const primaryLight = theme.palette.primary.light;
+  const alt = theme.palette.background.alt;
+
   return (
-    <div className="" style={{ backgroundColor: "#151447" }}>
-      <div className="container flex items-center justify-between mx-auto pt-8 px-[2.25rem]">
+    <div
+      className=""
+      style={{
+        backgroundColor: primaryLight,
+        boxShadow: "inset 0 2px 2px -2px rgba(21, 20, 71, 0.2), inset 0 -2px 2px -2px rgba(21, 20, 71, 0.2)"
+      }}
+    >
+      <div className="container flex items-center justify-between mx-auto md:pt-8 px-[2.25rem]">
         <div className="md:w-[55%] ">
           <h1 className=" text-white font-bold text-[20px]">
             Stay on top of crypto investments by following the experts.

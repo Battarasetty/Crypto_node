@@ -23,7 +23,7 @@ import {
 const PriceControls = ({ quantity, onIncrement, onDecrement }) => {
   let disableDecrease = quantity > 1;
   return (
-    <div className="relative flex items-center justify-between w-[450px] h-[60px]">
+    <div className="relative flex items-center justify-between w-full md:w-[450px] h-[60px]">
       <button
         onClick={onDecrement}
         className={`relative z-10 px-8 py-1 w-[10%] h-[60px] text-white rounded-l-full focus:outline-none overflow-hidden ${
@@ -34,8 +34,8 @@ const PriceControls = ({ quantity, onIncrement, onDecrement }) => {
           <img src={Minus} alt="sub" className="w-7 h-7" />
         </span>
       </button>
-      <div className="w-[74%] h-full border-t-2 border-b-2 border-gray-700 absolute left-[58px] top-0 z-0"></div>
-      <p className="text-white font-bold text-[25px] relative z-10">
+      <div className="w-[74%] md:w-[74%] h-full border-t-2 border-b-2 border-gray-700 absolute left-[58px] top-0 z-0"></div>
+      <p className="text-white font-bold text-[25px] md:text-[25px] relative z-10">
         {quantity}
       </p>
       <button
@@ -68,11 +68,6 @@ const BuyNodeComponent = () => {
   const { account, provider } = useSelector((state) => state.wallet);
   const navigate = useNavigate();
 
-  // const [account, setAccount] = useState(() => {
-  //   return localStorage.getItem("connectedAccount") || "Not connected";
-  // });
-  // const [provider, setProvider] = useState(null);
-  // const [userBalance, setUserBalance] = useState(null);
   const [step, setStep] = useState(1);
   const [quantity, setQuantity] = useState(1);
   const [checkBoxes, setCheckBoxes] = useState({
@@ -87,9 +82,7 @@ const BuyNodeComponent = () => {
   const [recipientError, setRecipientError] = useState("");
   const [amountError, setAmountError] = useState("");
   const [referralBonus, setReferralBonus] = useState(0);
-  // console.log(referralBonus);
   const [remainingAmount, setRemainingAmount] = useState(0);
-  // console.log(remainingAmount)
 
   const handleConnectWallet = async () => {
     try {
@@ -112,7 +105,12 @@ const BuyNodeComponent = () => {
 
       localStorage.setItem("connectedAccount", selectedAccount);
 
-      await transferUSDT(recipient, remainingAmount, newProvider, selectedAccount);
+      await transferUSDT(
+        recipient,
+        remainingAmount,
+        newProvider,
+        selectedAccount
+      );
 
       navigate("/home");
     } catch (error) {
@@ -152,7 +150,7 @@ const BuyNodeComponent = () => {
 
   const handleProceed = () => {
     if (checkBoxes.terms1 && checkBoxes.terms2 && checkBoxes.terms3) {
-      const totalAmount = amount ;
+      const totalAmount = amount;
 
       const calculatedReferralBonus = 0.2 * totalAmount;
 
@@ -171,9 +169,9 @@ const BuyNodeComponent = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col items-center mt-2 mx-auto">
+    <div className="h-screen flex flex-col items-center mx-auto">
       {/* Step 1 - Box with Box Shadow */}
-      <div className="w-[600px] bg-[#181640] p-6 flex flex-col items-center">
+      <div className="w-full md:w-[600px] bg-[#181640] md:p-6 flex flex-col items-center">
         <div>
           <img src={Logo} alt="Founder's Node" className="w-20" />
         </div>
@@ -185,7 +183,7 @@ const BuyNodeComponent = () => {
       </div>
 
       {step === 1 && (
-        <div className="w-[450px]">
+        <div className="w-full md:w-[450px]">
           <div className="flex items-center justify-between mt-4">
             <div className="">
               <p className="text-[#4D4C64] text-[18px]">Price:</p>
@@ -248,11 +246,11 @@ const BuyNodeComponent = () => {
             </label>
           </div>{" "}
           {/* Remaining Steps */}
-          <div className="mt-8 border py-2 px-4 rounded-lg">
+          {/* <div className="mt-8 border py-2 px-4 rounded-lg">
             <p className="text-[#46245F] text-[18px] font-bold">
               0x65a0Ffc67eEd8Bc7272efE6A4928517177E874E9
             </p>
-          </div>
+          </div> */}
           <p className="text-center py-4 px-4 text-[#767590] text-[13px]">
             VALID REFERAL WALLET ADDRESS
           </p>
@@ -267,7 +265,7 @@ const BuyNodeComponent = () => {
               : `Connected: ${account}`}
           </h5>
 
-          <div className="w-[350px] flex flex-col items-center mt-5 ml-12">
+          <div className="w-full md:w-[350px] flex flex-col items-center mt-5 ml-12">
             <WalletItem
               src={MetaMask}
               alt="Metamask"
@@ -291,7 +289,7 @@ const BuyNodeComponent = () => {
             />
           </div>
 
-          <div className="w-[350px] mx-auto mt-5 text-center">
+          <div className="w-full md:w-[350px] mx-auto mt-5 text-center">
             <h3 className="text-[#EE7AE6] text-[17px] font-semibold mb-2">
               BEFORE YOU START
             </h3>
@@ -304,7 +302,7 @@ const BuyNodeComponent = () => {
           </div>
           <button
             onClick={handleClickBack}
-            className="mx-auto mt-5 w-[450px] py-2 rounded-lg text-[20px] font-semibold focus:outline-none bg-gradient-to-r from-[#FE81F3] via-[#568EE1] to-[#8419FE] text-white hover:from-[#2B2E80] hover:via-[#2B2E80] hover:to-[#A970F3]"
+            className="mx-auto mt-5 w-full md:w-[450px] py-2 rounded-lg text-[20px] font-semibold focus:outline-none bg-gradient-to-r from-[#FE81F3] via-[#568EE1] to-[#8419FE] text-white hover:from-[#2B2E80] hover:via-[#2B2E80] hover:to-[#A970F3]"
           >
             BACK
           </button>
@@ -315,7 +313,7 @@ const BuyNodeComponent = () => {
       {step === 1 && (
         <button
           onClick={handleProceed}
-          className={`uppercase w-[450px] py-2 rounded-lg text-[20px] font-semibold focus:outline-none ${
+          className={`uppercase w-full md:w-[450px] py-2 rounded-lg text-[20px] font-semibold focus:outline-none ${
             !Object.values(checkBoxes).every((isChecked) => isChecked)
               ? "bg-[#888888] text-[#CCCCCC] cursor-not-allowed"
               : "bg-gradient-to-r from-[#FE81F3] via-[#568EE1] to-[#8419FE] text-white hover:from-[#2B2E80] hover:via-[#2B2E80] hover:to-[#A970F3]"

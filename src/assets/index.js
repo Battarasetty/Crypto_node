@@ -22,6 +22,8 @@ import right_1 from './right_1.svg'
 import right_2 from './right_2.svg'
 import right_3 from './right_3.svg'
 import right_4 from './right_4.svg'
+import hamburger from './hamburger.svg'
+import clear from './clear.svg'
 
 
 
@@ -50,4 +52,6 @@ export {
     right_2,
     right_3,
     right_4,
+    hamburger,
+    clear
 }

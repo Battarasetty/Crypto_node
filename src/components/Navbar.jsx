@@ -7,11 +7,10 @@ import {
   Notification,
   Arrow_down,
   toggle_effect,
+  hamburger,
+  clear,
 } from "../assets/";
-import {
-  DarkMode,
-  LightMode,
-} from "@mui/icons-material";
+import { DarkMode, KeyboardArrowDown, LightMode } from "@mui/icons-material";
 import {
   Box,
   IconButton,
@@ -22,8 +21,8 @@ import {
   FormControl,
   useTheme,
   useMediaQuery,
+  SwipeableDrawer,
 } from "@mui/material";
-// import ConnectWalletModal from "../../components/ConnectWalletModal";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -31,16 +30,12 @@ import {
   setAccount,
   setProvider,
   setUserBalance,
-  setMode
+  setMode,
 } from "../redux/wallet/walletSlice";
-// import { useSelector } from "react-redux";
-// import { WhiteListModal } from "../../components";
-// import { SwipeableDrawer } from "@mui/material";
+import { ethers } from "ethers";
 
 const Navbar = () => {
-  const [walletAddress, setWalletAddress] = useState("");
   const [hasNotifications, setHasNotifications] = useState(true);
-  const [openModal, setOpenModal] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Pool Participants");
   const [arrowRotation, setArrowRotation] = useState(0);
   const [arrowRotation2, setArrowRotation2] = useState(0);
@@ -53,21 +48,32 @@ const Navbar = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { account, provider, userBalance } = useSelector(
+  const { account, provider, userBalance, mode } = useSelector(
     (state) => state.wallet
   );
 
-  // const theme = useTheme();
-  // const neutralLight = theme.palette.neutral.light;
-  // const dark = theme.palette.neutral.dark;
-  // const background = theme.palette.background.default;
-  // const primaryLight = theme.palette.primary.light;
-  // const alt = theme.palette.background.alt;
+  const theme = useTheme();
+  const neutralLight = theme.palette.neutral.light;
+  const dark = theme.palette.neutral.dark;
+  const background = theme.palette.background.default;
+  const primaryLight = theme.palette.primary.light;
+  const alt = theme.palette.background.alt;
 
+  const [isPopupOpen, setPopupOpen] = useState(false);
+
+  const openPopup = () => {
+    setPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setPopupOpen(false);
+  };
 
   const handleDisconnect = async () => {
     try {
-      dispatch(disconnectWallet());
+      await dispatch(disconnectWallet());
+
+      closePopup();
 
       navigate("/");
     } catch (error) {
@@ -100,9 +106,40 @@ const Navbar = () => {
     // Check for connected wallet in local storage when component mounts
     const storedAccount = localStorage.getItem("connectedAccount");
     if (storedAccount) {
-      setWalletAddress(storedAccount);
+      dispatch(setAccount(storedAccount));
     }
-  }, []);
+  }, [dispatch]);
+
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  const updateWindowSize = () => {
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      updateWindowSize();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []); // Empty dependency array ensures it only runs once on mount
+
+  useEffect(() => {
+    // Check the window size and update your responsive state accordingly
+    const isMobileDevice = windowSize.width <= 768;
+    setIsMobile(isMobileDevice);
+    // Add similar logic for other responsive state variables if needed
+  }, [windowSize]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -127,99 +164,9 @@ const Navbar = () => {
     };
   }, [isDropdownOpen, isDropdownOpen2]);
 
-  //   const whitelist = useSelector((state) => state.whitelist.whitelist);
-
-  // const connectWallet = async () => {
-  //   if (
-  //     typeof window !== "undefined" &&
-  //     typeof window.ethereum !== "undefined"
-  //   ) {
-  //     try {
-  //       // Metamask is installed
-  //       const accounts = await window.ethereum.request({
-  //         method: "eth_requestAccounts",
-  //       });
-
-  //       // Set the wallet address
-  //       setWalletAddress(accounts[0]);
-
-  //       // Trigger handleConnectWallet function
-  //       handleConnectWallet();
-
-  //       console.log(accounts[0]);
-  //     } catch (error) {
-  //       console.error(error.message);
-  //     }
-  //   } else {
-  //     // Metamask is not installed
-  //     console.log("please install Metamask");
-  //   }
-  // };
-
-  // const getCurrentWalletConnected = async () => {
-  //   if (
-  //     typeof window !== "undefined" &&
-  //     typeof window.ethereum !== "undefined"
-  //   ) {
-  //     try {
-  //       const accounts = await window.ethereum.request({
-  //         method: "eth_accounts",
-  //       });
-  //       if (accounts.length > 0) {
-  //         setWalletAddress(accounts[0]);
-  //         console.log(accounts[0]);
-  //       } else {
-  //         console.log("Connect the metamask using Connect Button");
-  //       }
-  //     } catch (error) {
-  //       console.error(error.message);
-  //     }
-  //   } else {
-  //     // Metamask is not installed
-  //     console.log("please install Metamask");
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getCurrentWalletConnected();
-  //   addWalletListener();
-
-  //   // Attach event listener
-  //   window.addEventListener("resize", handleResize);
-
-  //   // Cleanup event listener on component unmount
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize);
-  //   };
-  // }, []);
-
-  // const addWalletListener = async () => {
-  //   if (
-  //     typeof window !== "undefined" &&
-  //     typeof window.ethereum !== "undefined"
-  //   ) {
-  //     window.ethereum.on("accountsChanged", (accounts) => {
-  //       setWalletAddress(accounts[0]);
-  //       console.log(accounts[0]);
-  //     });
-  //   } else {
-  //     // Metamask is not installed
-  //     setWalletAddress("");
-  //     console.log("please install Metamask");
-  //   }
-  // };
-
-  //   const handleWhitelistClick = () => {
-  //     setWhitelistModalOpen(true);
-  //   };
-
-  //   const closeWhitelistModal = () => {
-  //     setWhitelistModalOpen(false);
-  //   };
-
   const handleDropdownChange = () => {
     setDropdownOpen(!isDropdownOpen);
-    setArrowRotation(isDropdownOpen ? 0 : 180); // Rotate 180 degrees when opening, reset to 0 when closing
+    setArrowRotation(isDropdownOpen ? 0 : 180);
   };
 
   const handleOptionClick = (option) => {
@@ -228,8 +175,8 @@ const Navbar = () => {
     setArrowRotation(0);
   };
 
-  const [selectedOption2, setSelectedOption2] = useState("Ethereum"); // Make sure you have this state variable
-  const options2 = ["Ethereum", "Binance", "Avalanche", "Fantom", "Arbitrum"]; // Make sure you have this array
+  const [selectedOption2, setSelectedOption2] = useState("Ethereum");
+  const options2 = ["Ethereum", "Binance", "Avalanche", "Fantom", "Arbitrum"];
 
   const handleDropdownChange2 = () => {
     setDropdownOpen2(!isDropdownOpen2);
@@ -253,17 +200,124 @@ const Navbar = () => {
     setDrawerState({ ...drawerState, [anchor]: open });
   };
 
+  useEffect(() => {
+    const handleAccountsChanged = (newAccounts) => {
+      const { ethereum } = window;
+      if (!ethereum) {
+        console.error("MetaMask is not installed.");
+        return;
+      }
+      if (newAccounts.length > 0) {
+        // Dispatch the setWalletAddress action to update Redux state
+        dispatch(setAccount(newAccounts[0]));
+
+        // Update local storage
+        localStorage.setItem("connectedAccount", newAccounts[0]);
+
+        // Set the provider when the account changes
+        const newProvider = new ethers.providers.Web3Provider(window.ethereum);
+        dispatch(setProvider(newProvider));
+      } else {
+        // dispatch(setAccount("Not connected")); // This will update the Redux store
+        localStorage.removeItem("connectedAccount"); // This will remove the wallet address from local storage
+
+        dispatch(setProvider(null));
+        dispatch(setUserBalance(null));
+      }
+    };
+
+    // Check if MetaMask is installed
+    const { ethereum } = window;
+    if (ethereum) {
+      // Set the initial provider when the component mounts
+      const initialProvider = new ethers.providers.Web3Provider(
+        window.ethereum
+      );
+      dispatch(setProvider(initialProvider));
+
+      // Subscribe to account changes
+      ethereum.on("accountsChanged", handleAccountsChanged);
+
+      return () => {
+        // Cleanup the subscription when the component unmounts
+        ethereum.removeListener("accountsChanged", handleAccountsChanged);
+      };
+    }
+  }, [dispatch]); // Include dispatch in the dependency array
+
+  const list = (anchor) => (
+    <div
+      className=""
+      role="presentation"
+      onClick={toggleDrawer(anchor, false)}
+      onKeyDown={toggleDrawer(anchor, false)}
+    >
+      <div className="flex items-end justify-end cursor-pointer">
+        <img
+          src={clear}
+          alt="cross_icon"
+          className="w-8 h-8 cursor-pointer"
+          onClick={toggleDrawer(anchor, false)}
+        />{" "}
+      </div>
+      <div className="w-[100vw] max-w-[300px]">
+        <div className="flex justify-center items-center p-4">
+          <div className="flex items-center cursor-pointer justify-center mr-20">
+            <img src={Logo} alt="" className="w-10 h-10 relative" />
+            <span className="text-sm font-medium text-[#3840CD] absolute top-[68px] left-[125px]">
+              BULL RUN
+            </span>
+          </div>
+        </div>
+        <ul className="flex flex-col cursor-pointer items-center space-y-12 p-4">
+          {mockDataToken.map((item) => (
+            <li
+              key={item.id}
+              className="flex gap-2 items-center text-sm text-gray-500"
+            >
+              <span>{item.token}:</span>
+              <span className="text-blue-500">{item.value.toFixed(4)}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="flex flex-col cursor-pointer items-center space-y-12 p-4 mt-5">
+          <div
+            className="flex items-center space-x-2 cursor-pointer transform transition-transform hover:scale-110"
+            // onClick={handleWhitelistClick}
+          >
+            <img src={Favorite} alt="Favorite Icon" className="w-4 h-4" />
+            <p className="text-sm text-[#202020]">Whitelist</p>
+          </div>
+          <div className="flex items-center space-x-2">
+            <img src={pie} alt="Pie Icon" className="w-4 h-4" />
+            <p className="text-sm">Portfolio</p>
+          </div>
+          <div className="relative">
+            <img
+              src={hasNotifications ? Notification_bold : Notification}
+              alt="Notification Icon"
+              className="w-6 h-6"
+            />
+            {hasNotifications && (
+              <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <>
-      <header className="border-b">
+      <header className="border-b" style={{ backgroundColor: alt }}>
         <div className="flex justify-between m-auto items-center p-3 ">
           {isMobile ? (
             <div className="flex items-center">
               <div className="flex flex-col items-center cursor-pointer">
                 <img src={Logo} alt="" className="w-12 h-12 relative" />
-                <span className="text-sm font-medium text-[#3840CD] absolute top-[38px] left-[50px]">
+                {/* <span className="text-sm font-medium text-[#3840CD] absolute top-[38px] left-[50px]">
                   BULL RUN
-                </span>
+                </span> */}
               </div>
             </div>
           ) : (
@@ -271,17 +325,18 @@ const Navbar = () => {
               <Link to="/">
                 <div className="flex flex-col items-center">
                   <img src={Logo} alt="" className="w-12 h-12 relative" />
-                  {/* <span className="text-sm font-medium text-[#3840CD] absolute top-[38px] left-[50px]">
-                    BULL RUN
-                  </span> */}
                 </div>
               </Link>
             </div>
           )}
 
-          <div className="flex items-center space-x-6">
+          <div
+            className={`flex items-center space-x-2 ${
+              isMobile ? "justify-end" : ""
+            }`}
+          >
             {!isMobile && (
-              <ul className="flex items-center space-x-6">
+              <ul className="flex items-center space-x-4 mr-2">
                 {mockDataToken.map((item) => (
                   <li
                     key={item.id}
@@ -295,6 +350,7 @@ const Navbar = () => {
                 ))}
               </ul>
             )}
+
             {!isMobile && (
               <div className="flex items-center space-x-4">
                 <div
@@ -302,11 +358,15 @@ const Navbar = () => {
                   //   onClick={handleWhitelistClick}
                 >
                   <img src={Favorite} alt="Favorite Icon" className="w-4 h-4" />
-                  <p className="text-sm text-white">Whitelist</p>
+                  <p className="text-sm text-white" style={{ color: dark }}>
+                    Whitelist
+                  </p>
                 </div>
                 <div className="flex items-center space-x-2 hover:scale-110 cursor-pointer">
                   <img src={pie} alt="Pie Icon" className="w-4 h-4" />
-                  <p className="text-sm text-white">Portfolio</p>
+                  <p className="text-sm text-white" style={{ color: dark }}>
+                    Portfolio
+                  </p>
                 </div>
                 <div className="relative hover:scale-110 cursor-pointer">
                   <img
@@ -320,59 +380,103 @@ const Navbar = () => {
                 </div>
               </div>
             )}
+
             <div
-              className={`flex items-center space-x-4 ${
+              className={`flex items-center space-x-2 ${
                 isMobile ? "justify-end" : ""
               }`}
             >
-              <div
+               {!isMobile && (
+               <div
+               className="flex items-center justify-between gap-[4px] cursor-pointer"
+              //  onClick={handleDropdownChange}
+               style={{
+                 backgroundColor: "transparent",
+                 padding: "6px",
+                 borderRadius: "10px",
+                 border: `2px solid ${
+                   isDropdownOpen ? "#1890ff" : "#808080"
+                 }`,
+                 boxShadow: isDropdownOpen
+                   ? "0px 4px 8px rgba(0, 0, 0, 0.1)"
+                   : "none",
+               }}
+             >
+                  App
+                </div>
+              )}
+
+              {!isMobile && (
+                <div
                 className="dropdown-style text-white text-center cursor-pointer"
                 style={{
-                  backgroundColor: "#5763F3", // Set background color to #5763F3
-                  padding: "6px",
+                  backgroundColor: "#5763F3",
+                  padding: "7px",
                   borderRadius: "10px",
                   border: "none",
-                  width: "100px", // Set your desired width
+                  width: isMobile ? "40px" : "70px",
                   boxShadow: isDropdownOpen
                     ? "0px 4px 8px rgba(0, 0, 0, 0.1)"
                     : "none",
                 }}
               >
-                Node
-              </div>
+                  Node
+                </div>
+              )}
 
-              {/* Dropdown 1 */}
-              <div
-                ref={dropdownRef}
-                className={`relative ${isMobile ? "hidden" : "block"}`}
-              >
+              {isMobile && (
                 <div
-                  className="flex items-center justify-between gap-[4px] cursor-pointer"
-                  onClick={handleDropdownChange}
+                  className="dropdown-style text-white text-center cursor-pointer"
                   style={{
-                    backgroundColor: "transparent", // Set to 'transparent'
+                    backgroundColor: "#5763F3",
                     padding: "6px",
                     borderRadius: "10px",
-                    border: `2px solid ${
-                      isDropdownOpen ? "#1890ff" : "#808080"
-                    }`,
-                    width: "170px",
+                    border: "none",
+                    width: "40px", // Adjusted width for mobile
                     boxShadow: isDropdownOpen
                       ? "0px 4px 8px rgba(0, 0, 0, 0.1)"
                       : "none",
                   }}
                 >
-                  <div className="dropdown-style text-white cursor-pointer">
+                  N
+                </div>
+              )}
+
+              {/* Dropdown 1 */}
+              <div
+                ref={dropdownRef}
+                style={{ backgroundColor: alt }}
+                className={`relative ${
+                  isMobile ? "hidden" : "block md:flex equal-width-dropdown"
+                }`}
+              >
+                <div
+                  className="flex items-center justify-between gap-[4px] cursor-pointer"
+                  onClick={handleDropdownChange}
+                  style={{
+                    backgroundColor: "transparent",
+                    padding: "6px",
+                    borderRadius: "10px",
+                    border: `2px solid ${
+                      isDropdownOpen ? "#1890ff" : "#808080"
+                    }`,
+width: "170px",
+                    boxShadow: isDropdownOpen
+                      ? "0px 4px 8px rgba(0, 0, 0, 0.1)"
+                      : "none",
+                  }}
+                >
+                  <div
+                    style={{ color: dark }}
+                    className="dropdown-style text-white cursor-pointer"
+                  >
                     {selectedOption}
                   </div>
-                  <img
-                    src={Arrow_down}
-                    alt="arrow_down"
-                    className="w-3 h-3"
+                  <KeyboardArrowDown
                     style={{
-                      fill: isDropdownOpen ? "#1890ff" : "#808080",
                       transform: `rotate(${arrowRotation}deg)`,
                       transition: "transform 0.3s ease",
+                      color: isDropdownOpen ? "#1890ff" : "#808080",
                     }}
                   />
                 </div>
@@ -382,6 +486,7 @@ const Navbar = () => {
                     {selectedOption === "Pool Participants" ? (
                       <div
                         onClick={() => handleOptionClick("Pool Creator")}
+                        style={{ color: dark }}
                         className="p-3 cursor-pointer transition-all hover:bg-gray-100"
                       >
                         Pool Creator
@@ -401,13 +506,16 @@ const Navbar = () => {
               {/* Dropdown 2 */}
               <div
                 ref={dropdownRef2}
-                className={`relative ${isMobile ? "hidden" : "block"}`}
+                style={{ backgroundColor: alt }}
+                className={`relative ${
+                  isMobile ? "hidden" : "block lg:flex equal-width-dropdown"
+                }`}
               >
                 <div
                   className="flex items-center justify-between gap-[4px] cursor-pointer"
                   onClick={handleDropdownChange2}
                   style={{
-                    backgroundColor: "transparent", // Set to 'transparent'
+                    backgroundColor: "transparent",
                     padding: "6px",
                     borderRadius: "10px",
                     border: `2px solid ${
@@ -416,31 +524,32 @@ const Navbar = () => {
                     boxShadow: isDropdownOpen2
                       ? "0px 4px 8px rgba(0, 0, 0, 0.1)"
                       : "none",
-                    width: "125px",
                   }}
                 >
-                  <div className="dropdown-style text-white cursor-pointer">
+                  <div
+                    style={{ color: dark }}
+                    className="dropdown-style text-white cursor-pointer"
+                  >
                     {selectedOption2}
                   </div>
-                  <img
-                    src={Arrow_down}
-                    alt="arrow_down"
-                    className={`w-3 h-3 ${
-                      isDropdownOpen2 ? "text-blue-500" : "text-gray-500"
-                    }`}
+                  <KeyboardArrowDown
                     style={{
-                      fill: isDropdownOpen2 ? "#1890ff" : "#808080",
                       transform: `rotate(${arrowRotation2}deg)`,
                       transition: "transform 0.3s ease",
+                      color: isDropdownOpen2 ? "#1890ff" : "#808080",
                     }}
-                  />{" "}
+                  />
                 </div>
 
                 {isDropdownOpen2 && (
-                  <div className="absolute w-[170px] text-white top-full left-0 z-10 border border-gray-300 shadow-md max-h-36 overflow-y-auto mt-2 rounded-md">
+                  <div
+                    style={{ backgroundColor: alt }}
+                    className="absolute w-[170px] top-full left-0 z-10 border text-white border-gray-300 shadow-md max-h-36 overflow-y-auto mt-2 rounded-md scrollbar-hide"
+                  >
                     {options2.map((option, index) => (
                       <div
                         key={index}
+                        style={{ color: dark }}
                         onClick={() => handleOptionClick2(option)}
                         className="p-3 cursor-pointer transition-all hover:bg-gray-100"
                       >
@@ -451,79 +560,80 @@ const Navbar = () => {
                 )}
               </div>
 
-              {/* Connect Wallet */}
-              <div className="text-white">
-                <button
-                  className={`p-1.5 border-none border-2 rounded-lg bg-blue-500 text-white ${
-                    isMobile ? "rounded-full" : ""
-                  }`}
-                  onClick={handleDisconnect}
-                >
-                  {walletAddress ? (
-                    <>
-                      <span>{walletAddress.slice(0, 6)}</span> ...
-                      <span>{walletAddress.slice(-6)}</span>{" "}
-                    </>
-                  ) : (
-                    "Connect Wallet"
-                  )}
-                </button>
-              </div>
-              <div>
-                <img
-                  src={toggle_effect}
-                  alt="light_dark_mode"
-                  className="w-6 h-6 cursor-pointer"
-                />
-              </div>
+              <div className="flex items-center">
+                {/* Account Button */}
+                <div className="text-white">
+                  <button
+                    className={`p-1.5 border-none border-2 rounded-lg bg-blue-500 text-white ${
+                      isMobile ? "rounded-full" : ""
+                    }`}
+                    onClick={openPopup}
+                  >
+                    {account && (
+                      <>
+                        <span>{isMobile ? "M" : account.slice(0, 6)}</span>
+                        {!isMobile && " ... "}
+                        {!isMobile && <span>{account.slice(-6)}</span>}
+                      </>
+                    )}
+                  </button>
+                </div>
 
-              {/* Hamburger Icon for Mobile */}
-              {/* {isMobile && (
-                <img
-                  src={hamburger}
-                  alt="hamburger_menu"
-                  className="w-8 h-8 cursor-pointer"
-                  onClick={toggleDrawer("right", true)}
-                />
-              )} */}
+                {/* Mode Switch and Hamburger Icon */}
+                <div className="flex items-center">
+                  <IconButton onClick={() => dispatch(setMode())}>
+                    {theme.palette.mode === "dark" ? (
+                      <LightMode sx={{ color: dark, fontSize: "25px" }} />
+                    ) : (
+                      <DarkMode sx={{ fontSize: "25px" }} />
+                    )}
+                  </IconButton>
+                  {/* Hamburger Icon for Mobile */}
+                  {isMobile && (
+                    <img
+                      src={hamburger}
+                      alt="hamburger_menu"
+                      className="w-8 h-8 cursor-pointer"
+                      onClick={toggleDrawer("right", true)}
+                    />
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        {/* <div className="w-[80vw] mx-auto">
-          <ConnectWalletModal
-            open={openModal}
-            handleClose={handleClose}
-            onPoolCreatorClick={handlePoolCreatorClick}
-            onPoolParticipantClick={handlePoolParticipantClick}
-          />
-        </div> */}
       </header>
-
-      {/* <WhiteListModal
-        open={isWhitelistModalOpen}
-        handleClose={closeWhitelistModal}
-        title="Whitelisted Items"
-        content={
-          <ul>
-            {whitelist.map((item) => (
-              <li key={item._id}>
-                <p className="text-white">_id: {item._id}</p>
-                <p className="text-white">Pool ID: {item["Pool ID"]}</p>
-              </li>
-            ))}
-          </ul>
-        }
-      /> */}
-
-      {/* <SwipeableDrawer
+      {/* Disconnect Wallet Popup/Modal */}
+      {isPopupOpen && (
+        <div className="fixed inset-0 flex items-center justify-center">
+          <div className="bg-black bg-opacity-50 absolute inset-0"></div>
+          <div className="bg-white p-6 rounded-md z-10">
+            <p className="text-lg mb-4">Disconnect your wallet?</p>
+            <button
+              className="bg-red-500 text-white px-4 py-2 rounded-md mr-2"
+              onClick={() => {
+                handleDisconnect();
+              }}
+            >
+              Disconnect
+            </button>
+            <button
+              className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md"
+              onClick={closePopup}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+      <SwipeableDrawer
         anchor={"right"}
         open={drawerState["right"]}
         onClose={toggleDrawer("right", false)}
         onOpen={toggleDrawer("right", true)}
       >
         {list("right")}
-      </SwipeableDrawer> */}
+      </SwipeableDrawer>
     </>
   );
 };

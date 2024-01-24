@@ -1,7 +1,16 @@
 import React from "react";
 import { Logo } from "../assets";
+import { useTheme } from "@mui/material";
 
 const FooterComponent = () => {
+  const theme = useTheme();
+  // console.log(theme.palette.mode);
+  const neutralLight = theme.palette.neutral.light;
+  const dark = theme.palette.neutral.dark;
+  const background = theme.palette.background.default;
+  const primaryLight = theme.palette.primary.light;
+  const alt = theme.palette.background.alt;
+
   return (
     <>
       <footer className="py-8 px-4">
@@ -107,10 +116,14 @@ const FooterComponent = () => {
       <div
         className=" text-center text-[12px] p-4 rounded-lg"
         // className="text-center text-sm mt-4"
-        style={{ backgroundColor: "#151447" }}
+        style={{
+          backgroundColor: primaryLight,
+          boxShadow: "0px 4px 8px rgba(21, 20, 71, 0.2)",
+        }}
       >
-        <p className="text-[12px] text-white">
-          Copyright © 2024 Designed by Entitled<b className="text-[#c2aaaa]">arts</b>. All rights reserved.
+        <p className="text-[12px] text-white" style={{ color: dark }}>
+          Copyright © 2024 Designed by Entitled
+          <b className="text-[#c2aaaa]">arts</b>. All rights reserved.
         </p>
       </div>
     </>

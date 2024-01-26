@@ -35,30 +35,32 @@ const PriceControls = ({ quantity, onIncrement, onDecrement }) => {
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
   return (
-    <div className="relative flex items-center justify-between w-full md:w-[450px] h-[60px]">
+    <div className="relative flex items-center justify-between w-full md:w-[450px] sm:w-[300px] h-[50px] sm:h-[60px]">
       <button
         onClick={onDecrement}
-        className={`relative z-10 px-8 py-1 w-[10%] h-[60px] text-white rounded-l-full focus:outline-none overflow-hidden ${
+        className={`relative z-10 px-3 py-1 w-[20%] h-full text-white rounded-l-full focus:outline-none overflow-hidden ${
           quantity > 1 ? "bg-[#5763F3]" : "bg-[#2B2E80]"
-        }`}
+        } sm:px-8 sm:py-1 sm:w-[10%] sm:h-[60px]`}
       >
         <span className="absolute inset-0 flex items-center justify-center">
-          <img src={Minus} alt="sub" className="w-7 h-7" />
+          <img src={Minus} alt="sub" className="w-3 h-3 sm:w-4 sm:h-4" />
         </span>
       </button>
-      <div className="w-[74%] md:w-[74%] h-full border-t-2 border-b-2 border-gray-700 absolute left-[58px] top-0 z-0"></div>
-      <p
-        className="text-white font-bold text-[25px] md:text-[25px] relative z-10"
-        style={{ color: dark }}
-      >
-        {quantity}
-      </p>
+      <div className="w-[60%] sm:w-[70%] md:w-[74%] sm:py-6 h-full flex items-center justify-center border-t-2 border-b-2 border-gray-700">
+        <p
+          className="text-white font-bold text-[14px] sm:text-[16px] md:text-[18px] relative z-10"
+          style={{ color: dark }}
+        >
+          {quantity}
+        </p>
+      </div>
       <button
         onClick={onIncrement}
-        className="relative z-10 px-8 py-1 bg-[#5763F3] w-[10%] h-[60px] text-white rounded-r-full focus:outline-none overflow-hidden"
+        className="relative z-10 px-3 py-1 bg-[#5763F3] w-[20%] h-full text-white rounded-r-full focus:outline-none overflow-hidden 
+    sm:py-1 sm:px-8 sm:w-[10%] sm:h-[60px]"
       >
         <span className="absolute inset-0 flex items-center justify-center">
-          <img src={Add} alt="sub" className="w-7 h-7" />
+          <img src={Add} alt="sub" className="w-3 h-3 sm:w-4 sm:h-4" />
         </span>
       </button>
     </div>
@@ -252,14 +254,19 @@ const BuyNodeComponent = () => {
     <div className="h-screen flex flex-col items-center mx-auto">
       {/* Step 1 - Box with Box Shadow */}
       <div
-        className="w-full md:w-[600px] bg-[#181640] md:p-6 flex flex-col items-center"
+        className="w-full md:w-[600px] bg-[#181640] p-4 md:p-6 flex flex-col items-center"
         style={{ background: alt }}
       >
         <div>
-          <img src={Logo} alt="Founder's Node" className="w-20 mt-2" />
+          {/* Adjust image size for mobile screens */}
+          <img src={Logo} alt="Founder's Node" className="w-12 md:w-20 mt-2" />
         </div>
-        <div className="mt-4">
-          <h2 className="text-white text-3xl" style={{ color: dark }}>
+        <div className="mt-2 md:mt-4">
+          {/* Adjust text size for mobile screens */}
+          <h2
+            className="text-white text-xl md:text-3xl"
+            style={{ color: dark }}
+          >
             {step === 1 ? "FOUNDER'S NODE" : "Connect with a wallet"}
           </h2>
         </div>
@@ -279,28 +286,36 @@ const BuyNodeComponent = () => {
             }}
           >
             {theme.palette.mode === "dark" ? (
-              <LightMode sx={{ color: dark, fontSize: "25px" }} />
+              <LightMode
+                sx={{ color: dark, fontSize: { xs: "15px", md: "6xl" } }}
+              />
             ) : (
-              <DarkMode sx={{ fontSize: "25px" }} />
+              <DarkMode
+                sx={{ color: dark, fontSize: { xs: "15px", md: "6xl" } }}
+              />
             )}
           </IconButton>
-          <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center justify-between mt-0 md:mt-4">
             <div className="">
-              <p className="text-[#4D4C64] text-[18px]">Price:</p>
+              <p className="text-[#4D4C64] text-sm md:text-[18px]">Price:</p>
             </div>
 
-            <div className="flex items-center gap-5 py-4">
-              <img src={USDT} alt="USDT" className="w-6" />
+            <div className="flex items-center gap-3 md:gap-5 py-4">
+              {/* Adjust image size for small screens */}
+              <img src={USDT} alt="USDT" className="w-4 md:w-6" />
+              {/* Adjust text size for small screens */}
               <p
-                className="text-white text-2xl font-[400]"
+                className="text-white text-sm md:text-2xl font-[400]"
                 style={{ color: dark }}
               >
                 {amount.toFixed(2)}
               </p>
             </div>
           </div>
-          <div>
-            <h1 className="text-[#4D4C64] text-[18px] mb-2">Quantity</h1>
+          <div className="flex flex-col gap-2">
+            <h1 className="text-[#4D4C64] text-sm md:text-[18px] mb-2">
+              Quantity
+            </h1>
             {/* Controls */}
             <PriceControls
               quantity={quantity}
@@ -309,7 +324,7 @@ const BuyNodeComponent = () => {
             />
           </div>
           {/* Checkboxes for Terms and Conditions */}
-          <div className="flex flex-col items-start mt-8 px-8 gap-2">
+          <div className="flex flex-col items-start mt-8 px-8 gap-4 md:gap-4">
             <label className="flex items-center space-x-5 checkbox-label">
               <input
                 type="checkbox"
@@ -322,6 +337,7 @@ const BuyNodeComponent = () => {
                 <span className="text-[#46245F]">Terms of Service</span>
               </p>
             </label>
+
             <label className="flex items-center space-x-5 checkbox-label">
               <input
                 type="checkbox"
@@ -334,6 +350,7 @@ const BuyNodeComponent = () => {
                 <span className="text-[#46245F]">Privacy Policy</span>
               </p>
             </label>
+
             <label className="flex items-center space-x-5 checkbox-label">
               <input
                 type="checkbox"
@@ -347,32 +364,53 @@ const BuyNodeComponent = () => {
                 <span className="text-[#46245F]">not investments</span>
               </p>
             </label>
-          </div>{" "}
-          {/* Remaining Steps */}
-          <div className="my-5">
-            <div className="mt-8 border py-2 px-4 rounded-lg">
-              <input
-                type="text"
-                placeholder="ENTER REFERRAL ADDRESS"
-                className="w-full text-[#46245F] text-[12px] md:text-[18px] font-bold p-2 rounded-lg focus:outline-none bg-transparent"
-                value={referralAddress}
-                onChange={handleReferralInputChange}
-              />
-            </div>
+          </div>
 
-            {referralAddress && (
-              <div>
-                {isValidReferral ? (
-                  <p className="text-center py-4 px-4 text-[#767590] text-[13px]">
-                    VALID REFERRAL WALLET ADDRESS
-                  </p>
-                ) : (
-                  <p className="text-center py-4 px-4 text-[#FF0000] text-[13px]">
-                    INVALID REFERRAL WALLET ADDRESS
-                  </p>
+          {/* Remaining Steps */}
+          <div className="mt-8 flex flex-col gap-2 md:gap-4">
+            <div>
+              <div className="border py-[6px] px-4 rounded-lg focus-within:border-[#5763F3]">
+                <input
+                  type="text"
+                  placeholder="ENTER REFERRAL ADDRESS"
+                  className="w-full text-[#46245F] text-[8px] md:text-[13px] p-[3px] rounded-lg focus:outline-none bg-transparent"
+                  value={referralAddress}
+                  onChange={handleReferralInputChange}
+                />
+              </div>
+
+              {/* Add margin-top to create space between input and proceed button */}
+              <div className="mt-3">
+                {referralAddress && (
+                  <div>
+                    {/* Add a margin-top to create space */}
+                    {isValidReferral ? (
+                      <p className="text-center py-1 text-[#5E6B89] text-[13px]">
+                        Valid referral wallet address
+                      </p>
+                    ) : (
+                      <p className="text-center py-1 text-[#FF0000] text-[13px]">
+                        Invalid referral wallet address
+                      </p>
+                    )}
+                  </div>
                 )}
               </div>
-            )}
+            </div>
+
+            <button
+              onClick={handleProceed}
+              className={`uppercase w-full md:w-[450px] py-1 md:py-[6px] rounded-lg text-[20px] font-semibold focus:outline-none ${
+                !Object.values(checkBoxes).every((isChecked) => isChecked)
+                  ? "bg-[#888888] text-[#CCCCCC] cursor-not-allowed opacity-50" // Add opacity when disabled
+                  : "bg-gradient-to-r from-[#FE81F3] via-[#568EE1] to-[#8419FE] text-white hover:from-[#2B2E80] hover:via-[#2B2E80] hover:to-[#A970F3]"
+              }`}
+              disabled={
+                !Object.values(checkBoxes).every((isChecked) => isChecked)
+              }
+            >
+              Proceed
+            </button>
           </div>
         </div>
       )}
@@ -391,12 +429,16 @@ const BuyNodeComponent = () => {
             }}
           >
             {theme.palette.mode === "dark" ? (
-              <LightMode sx={{ color: dark, fontSize: "25px" }} />
+              <LightMode
+                sx={{ color: dark, fontSize: { xs: "15px", md: "6xl" } }}
+              />
             ) : (
-              <DarkMode sx={{ fontSize: "25px" }} />
+              <DarkMode
+                sx={{ color: dark, fontSize: { xs: "15px", md: "6xl" } }}
+              />
             )}
           </IconButton>
-          <div>
+          <div className="flex flex-col gap-2">
             <h5
               className="text-white mt-2 text-center text-[10px]"
               style={{ color: dark }}
@@ -406,7 +448,7 @@ const BuyNodeComponent = () => {
                 : `Connected: ${account}`}
             </h5>
 
-            <div className="w-full md:w-[350px] flex flex-col items-center mt-3 md:mt-5 md:ml-12">
+            <div className="w-full md:w-[350px] flex flex-col gap-2 md:gap-0 items-center mt-3 md:mt-5 md:ml-12">
               <WalletItem
                 src={MetaMask_Fox}
                 // alt="Metamask"
@@ -431,19 +473,17 @@ const BuyNodeComponent = () => {
             </div>
 
             <div className="w-full md:w-[350px] mx-auto mt-3 md:mt-5 text-center">
-              <h3 className="text-[#EE7AE6] text-[17px] font-semibold mb-2">
+              <h3 className="text-[#EE7AE6] text-[14px] md:text-[17px] font-semibold mb-2">
                 BEFORE YOU START
               </h3>
-              <ol
-                className="text-white text-[15px] text-left pl-4 list-decimal-none"
-                style={{ color: dark }}
-              >
+              <ol className="text-white text-[12px] md:text-[15px] text-left pl-4 list-decimal-none" style={{color: dark}}>
                 <li>1. Download Dapp Wallet app or extension</li>
                 <li>2. Switch to Ethereum Network</li>
                 <li>3. Transfer USDT to your Dapp wallet</li>
                 <li>4. Get an invitation code</li>
               </ol>
             </div>
+
             <button
               onClick={handleClickBack}
               className="mx-auto mt-5 w-full md:w-[450px] py-2 rounded-lg text-[20px] font-semibold focus:outline-none bg-gradient-to-r from-[#FE81F3] via-[#568EE1] to-[#8419FE] text-white hover:from-[#2B2E80] hover:via-[#2B2E80] hover:to-[#A970F3]"
@@ -454,25 +494,10 @@ const BuyNodeComponent = () => {
         </>
       )}
 
-      {/* Button  */}
-      {step === 1 && (
-        <button
-          onClick={handleProceed}
-          className={`uppercase w-[90%] md:w-[450px] py-2 rounded-lg text-[20px] font-semibold focus:outline-none ${
-            !Object.values(checkBoxes).every((isChecked) => isChecked)
-              ? "bg-[#888888] text-[#CCCCCC] cursor-not-allowed"
-              : "bg-gradient-to-r from-[#FE81F3] via-[#568EE1] to-[#8419FE] text-white hover:from-[#2B2E80] hover:via-[#2B2E80] hover:to-[#A970F3]"
-          }`}
-          disabled={!Object.values(checkBoxes).every((isChecked) => isChecked)}
-        >
-          Proceed
-        </button>
-      )}
-
       {/* Back  */}
       {step === 1 && (
         <p
-          className="text-center mt-2 text-white text-[13px] cursor-pointer"
+          className="text-center mt-0 md:mt-2 text-white text-[13px] cursor-pointer"
           onClick={handleClickBack}
           style={{ color: dark }}
         >

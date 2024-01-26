@@ -150,8 +150,10 @@ const Home = () => {
             className="text-[15px] md:text-3xl font-bold text-white"
             style={{ color: dark }}
           >
-            <span className="text-[#5763F3]">Congratulations</span> on your Node
-            Purchase
+            <p className="font-[300]">
+              <span className="text-[#5763F3] text-[300]">Congratulations</span>{" "}
+              on your Node Purchase
+            </p>
           </h1>
           <p
             className="flex items-center justify-center text-md text-[14px] text-white"
@@ -168,7 +170,7 @@ const Home = () => {
           <Card
             sx={{
               minWidth: 275,
-              boxShadow: "0px 4px 8px rgba(21, 20, 71, 0.2)",
+              boxShadow: "0px 0px 4px 0px rgba(21, 20, 71, 0.2)", // Equal box shadow
               width: "100%", // Full width on small screens
               maxWidth: "530px", // Limit maximum width on larger screens
               // margin: "0 auto", // Center the card horizontally
@@ -177,40 +179,55 @@ const Home = () => {
             <CardContent
               sx={{
                 backgroundColor: primaryLight,
-                height: "350px", // Set your desired height
+                height: "390px", // Set your desired height
                 width: "100%", // Full width on small screens
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
+                padding: "30px", // Add padding to the content
               }}
             >
               <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
                 <div className="flex items-center gap-10">
                   <img src={left_1} alt="Left 1" className="w-10 h-10" />
-                  <span className="text-[#5763F3]">MY FOUNDER'S NODES</span>
+                  <span className="text-[#5763F3] font-bold">
+                    MY FOUNDER'S NODES
+                  </span>
                 </div>
-                <span className="text-white">01</span>
+                <span className="text-white" style={{ color: dark }}>
+                  01
+                </span>
               </div>
               <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
                 <div className="flex items-center gap-10">
                   <img src={left_2} alt="Left 2" className="w-10 h-10" />
-                  <span className="text-[#5763F3]">XBR REWARDS</span>
+                  <span className="text-[#5763F3] font-bold">XBR REWARDS</span>
                 </div>
-                <span className="text-white">0.0358</span>
+                <span className="text-white" style={{ color: dark }}>
+                  0.0358
+                </span>
               </div>
               <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
                 <div className="flex items-center gap-10">
                   <img src={left_3} alt="Left 3" className="w-10 h-10" />
-                  <span className="text-[#5763F3]">UNCLAIMED XBR REWARDS</span>
+                  <span className="text-[#5763F3] font-bold">
+                    UNCLAIMED XBR REWARDS
+                  </span>
                 </div>
-                <span className="text-white">0.0145</span>
+                <span className="text-white" style={{ color: dark }}>
+                  0.0145
+                </span>
               </div>
               <div className="flex items-center justify-between pb-2 border-b border-[#080628]">
                 <div className="flex items-center gap-10">
                   <img src={left_4} alt="Left 4" className="w-10 h-10" />
-                  <span className="text-[#5763F3]">REFERRAL EARNINGS</span>
+                  <span className="text-[#5763F3] font-bold">
+                    REFERRAL EARNINGS
+                  </span>
                 </div>
-                <span className="text-white">$600.00</span>
+                <span className="text-white" style={{ color: dark }}>
+                  $600.00
+                </span>
               </div>
               <div className="flex justify-center mt-6">
                 <button
@@ -232,7 +249,7 @@ const Home = () => {
           <Card
             sx={{
               minWidth: 275,
-              boxShadow: "0px 4px 8px rgba(21, 20, 71, 0.2)",
+              boxShadow: "0px 0px 4px 0px rgba(21, 20, 71, 0.2)", // Equal box shadow
               width: "100%", // Full width on small screens
               maxWidth: "530px", // Limit maximum width on larger screens
               // margin: "0 auto", // Center the card horizontally
@@ -241,40 +258,57 @@ const Home = () => {
             <CardContent
               sx={{
                 backgroundColor: primaryLight,
-                height: "350px", // Set your desired height
+                height: "390px", // Set your desired height
                 width: "100%", // Full width on small screens
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
+                padding: "30px", // Add padding to the content
               }}
             >
               <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
                 <div className="flex items-center gap-10">
                   <img src={left_1} alt="Left 1" className="w-10 h-10" />
-                  <span className="text-[#5763F3]">MY FOUNDER'S NODES</span>
+                  <span className="text-[#5763F3] font-bold">
+                    GLOBEL FOUNDER'S NODES
+                  </span>
                 </div>
-                <span className="text-white">01</span>
+                <span className="text-white" style={{ color: dark }}>
+                  01
+                </span>
               </div>
               <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
                 <div className="flex items-center gap-10">
                   <img src={left_2} alt="Left 2" className="w-10 h-10" />
-                  <span className="text-[#5763F3]">XBR REWARDS</span>
+                  <span className="text-[#5763F3] font-bold">
+                    AVALIABLE FOUNDER'S NODES
+                  </span>
                 </div>
-                <span className="text-white">0.0358</span>
+                <span className="text-white" style={{ color: dark }}>
+                  0.0358
+                </span>
               </div>
               <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
                 <div className="flex items-center gap-10">
                   <img src={left_3} alt="Left 3" className="w-10 h-10" />
-                  <span className="text-[#5763F3]">UNCLAIMED XBR REWARDS</span>
+                  <span className="text-[#5763F3] font-bold">
+                    XBR REWARDS DISTRIBUTED
+                  </span>
                 </div>
-                <span className="text-white">0.0145</span>
+                <span className="text-white" style={{ color: dark }}>
+                  0.0145
+                </span>
               </div>
               <div className="flex items-center justify-between pb-2 border-b border-[#080628]">
                 <div className="flex items-center gap-10">
                   <img src={left_4} alt="Left 4" className="w-10 h-10" />
-                  <span className="text-[#5763F3]">REFERRAL EARNINGS</span>
+                  <span className="text-[#5763F3] font-bold">
+                    0x7c8f749d5fe60229fcd...
+                  </span>
                 </div>
-                <span className="text-white">$600.00</span>
+                <span className="text-white" style={{ color: dark }}>
+                  $600.00
+                </span>
               </div>
               <div className="flex justify-center mt-6">
                 <button

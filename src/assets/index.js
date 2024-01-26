@@ -8,7 +8,6 @@ import USDT from './USDT.svg';
 import trust_wallet from './trust_wallet.svg';
 import other_wallet from './other_wallet.svg';
 import Minus from './Minus.svg';
-import MetaMask from './MetaMask.svg';
 import Logo from './Logo.svg';
 import Favorite from './Favorite.svg';
 import arrow_right from './arrow_right.svg';
@@ -24,6 +23,12 @@ import right_3 from './right_3.svg'
 import right_4 from './right_4.svg'
 import hamburger from './hamburger.svg'
 import clear from './clear.svg'
+import arrow_left from './arrow_left.svg'
+import MetaMask_Fox from './MetaMask_Fox.png'
+import wallet_1 from './wallet_1.png'
+import wallet_2 from './wallet_2.png'
+import wallet_3 from './wallet_3.png'
+// import wallet_4 from './wallet_4.png'
 
 
 
@@ -38,7 +43,6 @@ export {
     trust_wallet,
     other_wallet,
     Minus,
-    MetaMask,
     Logo,
     Favorite,
     arrow_right,
@@ -53,5 +57,11 @@ export {
     right_3,
     right_4,
     hamburger,
-    clear
+    clear,
+    arrow_left,
+    MetaMask_Fox,
+    wallet_1,
+    wallet_2,
+    wallet_3,
+    // wallet_4,
 }

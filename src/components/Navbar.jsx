@@ -315,16 +315,24 @@ const Navbar = () => {
             <div className="flex items-center">
               <div className="flex flex-col items-center cursor-pointer">
                 <img src={Logo} alt="" className="w-12 h-12 relative" />
-                {/* <span className="text-sm font-medium text-[#3840CD] absolute top-[38px] left-[50px]">
+                <span className="text-sm font-medium text-[#3840CD] absolute top-[38px] left-[50px]">
                   BULL RUN
-                </span> */}
+                </span>
               </div>
             </div>
           ) : (
             <div className="flex items-center">
               <Link to="/">
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center relative">
                   <img src={Logo} alt="" className="w-12 h-12 relative" />
+                  <div className="flex items-center absolute top-[27px] left-[38px]">
+                    <span className="text-sm font-medium text-[#3840CD]">
+                      BULL
+                    </span>
+                    <span className="text-sm font-medium text-[#3840CD]">
+                      RUN
+                    </span>
+                  </div>
                 </div>
               </Link>
             </div>
@@ -386,40 +394,41 @@ const Navbar = () => {
                 isMobile ? "justify-end" : ""
               }`}
             >
-               {!isMobile && (
-               <div
-               className="flex items-center justify-between gap-[4px] cursor-pointer"
-              //  onClick={handleDropdownChange}
-               style={{
-                 backgroundColor: "transparent",
-                 padding: "6px",
-                 borderRadius: "10px",
-                 border: `2px solid ${
-                   isDropdownOpen ? "#1890ff" : "#808080"
-                 }`,
-                 boxShadow: isDropdownOpen
-                   ? "0px 4px 8px rgba(0, 0, 0, 0.1)"
-                   : "none",
-               }}
-             >
+              {!isMobile && (
+                <div
+                  className="flex ml-2 items-center justify-center gap-[4px] cursor-pointer"
+                  //  onClick={handleDropdownChange}
+                  style={{
+                    backgroundColor: "transparent",
+                    padding: "6px",
+                    borderRadius: "10px",
+                    border: `2px solid ${
+                      isDropdownOpen ? "#1890ff" : "#808080"
+                    }`,
+                    width: isMobile ? "20px" : "50px",
+                    boxShadow: isDropdownOpen
+                      ? "0px 4px 8px rgba(0, 0, 0, 0.1)"
+                      : "none",
+                  }}
+                >
                   App
                 </div>
               )}
 
               {!isMobile && (
                 <div
-                className="dropdown-style text-white text-center cursor-pointer"
-                style={{
-                  backgroundColor: "#5763F3",
-                  padding: "7px",
-                  borderRadius: "10px",
-                  border: "none",
-                  width: isMobile ? "40px" : "70px",
-                  boxShadow: isDropdownOpen
-                    ? "0px 4px 8px rgba(0, 0, 0, 0.1)"
-                    : "none",
-                }}
-              >
+                  className="dropdown-style text-white text-center cursor-pointer"
+                  style={{
+                    backgroundColor: "#5763F3",
+                    padding: "7px",
+                    borderRadius: "10px",
+                    border: "none",
+                    width: isMobile ? "40px" : "70px",
+                    boxShadow: isDropdownOpen
+                      ? "0px 4px 8px rgba(0, 0, 0, 0.1)"
+                      : "none",
+                  }}
+                >
                   Node
                 </div>
               )}
@@ -460,7 +469,7 @@ const Navbar = () => {
                     border: `2px solid ${
                       isDropdownOpen ? "#1890ff" : "#808080"
                     }`,
-width: "170px",
+                    width: "170px",
                     boxShadow: isDropdownOpen
                       ? "0px 4px 8px rgba(0, 0, 0, 0.1)"
                       : "none",

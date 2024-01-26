@@ -312,16 +312,10 @@ const Home = () => {
               </div>
               <div className="flex justify-center mt-6">
                 <button
-                  className="bg-[#22246A] text-[#5763F3] px-6 rounded-l-full"
+                  className="bg-[#22246A] text-[#5763F3] py-2 px-8 rounded-full"
                   style={{ background: neutralLight }}
                 >
-                  Mint & Claim
-                </button>
-                <button
-                  className="bg-[#22246A] text-[#5763F3] py-2 px-4 rounded-r-full ml-2"
-                  style={{ background: neutralLight }}
-                >
-                  Sell a Node
+                  Buy a Node
                 </button>
               </div>
             </CardContent>

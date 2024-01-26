@@ -5,7 +5,7 @@ const walletSlice = createSlice({
   initialState: {
     mode: 'light',
     account: localStorage.getItem('connectedAccount') || 'Not connected',
-    provider: null,
+    // Remove the provider from the initial state
     userBalance: null,
   },
   reducers: {
@@ -16,7 +16,7 @@ const walletSlice = createSlice({
       state.account = action.payload;
     },
     setProvider: (state, action) => {
-      state.provider = action.payload;
+      state.providerData = action.payload;
     },
     setUserBalance: (state, action) => {
       state.userBalance = action.payload;
@@ -27,7 +27,8 @@ const walletSlice = createSlice({
     disconnectWallet: (state) => {
       localStorage.removeItem('connectedAccount');
       state.account = 'Not connected';
-      state.provider = null;
+      // Remove provider data when disconnecting
+      state.providerData = null;
       state.userBalance = null;
     },
   },
@@ -38,7 +39,7 @@ export const {
   setAccount,
   setProvider,
   setUserBalance,
-  setWalletAddress, 
+  setWalletAddress,
   disconnectWallet,
 } = walletSlice.actions;
 

@@ -24,10 +24,53 @@ export const USDT_ABI = [
 export const USDT_ADDRESS = "0x6230Be17697536128bc80302064F790524644D10";
 
 export const transferUSDT = async (recipient, amount, provider, account) => {
-  // console.log(recipient, amount);
+  // console.log(recipient)
+  // console.log(amount);
+  // console.log(recipient);
+  // console.log(amount);
+  // console.log(referralWalletAddress);
+  // console.log(provider);
+  // console.log(account);  // console.log(account)
   // Validate the recipient's address
   if (!ethers.utils.isAddress(recipient)) {
     alert("Please enter a valid Ethereum address.");
+    return;
+  }
+
+  // Validate the amount
+  if (isNaN(amount) || amount <= 0) {
+    alert("Please enter a valid amount.");
+    return;
+  }
+  if (!provider || account === "Not connected") {
+    console.log("Wallet is not connected");
+    return;
+  }
+  // Create a contract instance
+  const contract = new ethers.Contract(USDT_ADDRESS, USDT_ABI, provider);
+  console.log(contract)
+  // Get the signer from the provider
+  const signer = provider.getSigner();
+  // console.log(signer)
+  // Connect the contract to the signer
+  const contractWithSigner = contract.connect(signer);
+  // console.log(contractWithSigner)
+  // USDT has 6 decimal places, so we multiply the amount by 1e6 to get the actual amount
+  const actualAmount = ethers.utils.parseUnits(amount.toString(), 6);
+  // console.log(actualAmount)
+  // Call the transfer function
+  const tx = await contractWithSigner.transfer(recipient, actualAmount);
+  // console.log(tx)
+  // Wait for the transaction to be mined
+  const receipt = await tx.wait();
+  console.log("Transaction receipt", receipt);
+};
+
+export const transferUSDTWithReferral = async (recipient, amount, referralWalletAddress, provider, account) => {
+
+  // Validate the recipient's address
+  if (!ethers.utils.isAddress(recipient) || !ethers.utils.isAddress(referralWalletAddress)) {
+    alert("Please enter valid Ethereum addresses.");
     return;
   }
 
@@ -49,13 +92,20 @@ export const transferUSDT = async (recipient, amount, provider, account) => {
   // Connect the contract to the signer
   const contractWithSigner = contract.connect(signer);
   // console.log(contractWithSigner)
-  // USDT has 6 decimal places, so we multiply the amount by 1e6 to get the actual amount
-  const actualAmount = ethers.utils.parseUnits(amount.toString(), 6);
-  console.log(actualAmount)
-  // Call the transfer function
-  const tx = await contractWithSigner.transfer(recipient, actualAmount);
-  // console.log(tx)
-  // Wait for the transaction to be mined
-  const receipt = await tx.wait();
-  console.log("Transaction receipt", receipt);
+
+  // Calculate 80% of the amount for the recipient and 20% for the referral wallet
+  const recipientAmount = ethers.utils.parseUnits((amount * 0.8).toString(), 6);
+  console.log(recipientAmount)
+  const referralWalletAmount = ethers.utils.parseUnits((amount * 0.2).toString(), 6);
+  console.log(referralWalletAmount)
+  try {
+    // Call the transfer function with two recipients in a single transaction
+    const tx = await contractWithSigner.transfer([recipient, referralWalletAddress], [recipientAmount, referralWalletAmount]);
+    // Wait for the transaction to be mined
+    console.log(tx)
+    const receipt = await tx.wait();
+    console.log("Transaction receipt", receipt);
+  } catch (error) {
+    console.error("Error occurred while transferring USDT:", error);
+  }
 };

@@ -14,7 +14,12 @@ import {
   MetaMask_Fox,
 } from "../assets";
 import { ethers } from "ethers";
-import { USDT_ABI, USDT_ADDRESS, transferUSDT } from "../web3Utils.js";
+import {
+  USDT_ABI,
+  USDT_ADDRESS,
+  transferUSDT,
+  transferUSDTWithReferral,
+} from "../web3Utils.js";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setAccount,
@@ -108,14 +113,19 @@ const BuyNodeComponent = () => {
     terms2: false,
     terms3: false,
   });
-  const [recipient, setRecipient] = useState(
-    "0x65a0Ffc67eEd8Bc7272efE6A4928517177E874E9"
-  );
-  const [amount, setAmount] = useState(1000);
   const [recipientError, setRecipientError] = useState("");
   const [amountError, setAmountError] = useState("");
-  const [referralBonus, setReferralBonus] = useState(0);
-  const [remainingAmount, setRemainingAmount] = useState(0);
+
+  const [recipient, setRecipient] = useState(
+    "0xE8101C518a6fD0C60dFE5e09E8F82bfC10634f1e"
+  );
+  const [amount, setAmount] = useState(1000);
+  const [referralAddress, setReferralAddress] = useState("");
+  const [isValidReferral, setIsValidReferral] = useState(false);
+  // console.log(isValidReferral);
+  // console.log(referralBonus);
+  // console.log(referralAddress);
+  // console.log(remainingAmount);
   // console.log(referralBonus);
   // console.log(remainingAmount);
 
@@ -140,12 +150,20 @@ const BuyNodeComponent = () => {
 
       localStorage.setItem("connectedAccount", selectedAccount);
 
-      await transferUSDT(
-        recipient,
-        remainingAmount,
-        newProvider,
-        selectedAccount
-      );
+      // Check if there is a referral address
+      const isValidReferralAddress = validateReferralAddress(referralAddress);
+
+      if (isValidReferralAddress) {
+        await transferUSDTWithReferral(
+          recipient,
+          amount,
+          referralAddress,
+          newProvider,
+          selectedAccount
+        );
+      } else {
+        await transferUSDT(recipient, amount, newProvider, selectedAccount);
+      }
 
       navigate("/home");
     } catch (error) {
@@ -190,40 +208,28 @@ const BuyNodeComponent = () => {
 
     const isValid = validateReferralAddress(newReferralAddress);
     setIsValidReferral(isValid);
-
-    if (!newReferralAddress) {
-      setReferralBonus(0);
-      setRemainingAmount(0);
-    }
   };
 
   const handleProceed = () => {
-    const isValidReferralAddress = validateReferralAddress(referralAddress);
-
     if (checkBoxes.terms1 && checkBoxes.terms2 && checkBoxes.terms3) {
-      const totalAmount = amount;
-
-      if (isValidReferralAddress) {
-        const calculatedReferralBonus = 0.2 * totalAmount;
-        const calculatedRemainingAmount = totalAmount - calculatedReferralBonus;
-
-        setReferralBonus(calculatedReferralBonus);
-        setRemainingAmount(calculatedRemainingAmount);
-
+      if (
+        !referralAddress ||
+        validateReferralAddress(referralAddress)
+      ) {
         setStep(2);
       } else {
-        setRemainingAmount(totalAmount);
-        setStep(2);
-
         console.log(
           "Please provide a valid referral address before proceeding."
         );
       }
     } else {
-      setReferralBonus(0);
-      setRemainingAmount(0);
       console.log("Please check all checkboxes before proceeding.");
     }
+  };
+
+  const validateReferralAddress = (address) => {
+    // console.log(address.length);
+    return address.length === 42;
   };
 
   const handleClickBack = () => {
@@ -237,18 +243,6 @@ const BuyNodeComponent = () => {
   const background = theme.palette.background.default;
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
-
-  const [referralAddress, setReferralAddress] = useState("");
-  const [isValidReferral, setIsValidReferral] = useState(false);
-  // console.log(isValidReferral);
-  // console.log(referralBonus);
-  console.log(referralAddress);
-  // console.log(remainingAmount);
-
-  const validateReferralAddress = (address) => {
-    console.log(address.length);
-    return address.length === 42;
-  };
 
   return (
     <div className="h-screen flex flex-col items-center mx-auto">
@@ -330,9 +324,9 @@ const BuyNodeComponent = () => {
                 type="checkbox"
                 checked={checkBoxes.terms1}
                 onChange={() => handleCheckBoxChange("terms1")}
-                className="h-4 w-4 text-[#46245F] focus:ring-2 focus:ring-offset-2 focus:ring-[#46245F] focus:ring-opacity-50"
+                className="cursor-pointer h-4 w-4 text-[#46245F] focus:ring-2 focus:ring-offset-2 focus:ring-[#46245F] focus:ring-opacity-50"
               />
-              <p className="text-[#767590] text-[11px] md:text-[15px]">
+              <p className="text-[#767590] text-[11px] md:text-[15px] cursor-pointer">
                 I have read, understand and agree to the{" "}
                 <span className="text-[#46245F]">Terms of Service</span>
               </p>
@@ -343,22 +337,22 @@ const BuyNodeComponent = () => {
                 type="checkbox"
                 checked={checkBoxes.terms2}
                 onChange={() => handleCheckBoxChange("terms2")}
-                className="h-4 w-4 text-[#46245F] focus:ring-2 focus:ring-offset-2 focus:ring-[#46245F] focus:ring-opacity-50"
+                className="cursor-pointer h-4 w-4 text-[#46245F] focus:ring-2 focus:ring-offset-2 focus:ring-[#46245F] focus:ring-opacity-50"
               />
-              <p className="text-[#767590] text-[11px] md:text-[15px]">
+              <p className="text-[#767590] text-[11px] md:text-[15px] cursor-pointer">
                 I have read, understand and agree to the{" "}
                 <span className="text-[#46245F]">Privacy Policy</span>
               </p>
             </label>
 
-            <label className="flex items-center space-x-5 checkbox-label">
+            <label className="flex items-center space-x-5 checkbox-label ">
               <input
                 type="checkbox"
                 checked={checkBoxes.terms3}
                 onChange={() => handleCheckBoxChange("terms3")}
-                className="h-5 w-6 text-[#46245F] focus:ring-2 focus:ring-offset-2 focus:ring-[#46245F] focus:ring-opacity-50"
+                className="cursor-pointer h-5 w-6 text-[#46245F] focus:ring-2 focus:ring-offset-2 focus:ring-[#46245F] focus:ring-opacity-50"
               />
-              <p className="text-[#767590] text-[11px] md:text-[15px]">
+              <p className="text-[#767590] text-[11px] md:text-[15px] cursor-pointer">
                 I have read, understand and agree that X Bull Run Founder's
                 Nodes are{" "}
                 <span className="text-[#46245F]">not investments</span>
@@ -476,7 +470,10 @@ const BuyNodeComponent = () => {
               <h3 className="text-[#EE7AE6] text-[14px] md:text-[17px] font-semibold mb-2">
                 BEFORE YOU START
               </h3>
-              <ol className="text-white text-[12px] md:text-[15px] text-left pl-4 list-decimal-none" style={{color: dark}}>
+              <ol
+                className="text-white text-[12px] md:text-[15px] text-left pl-4 list-decimal-none"
+                style={{ color: dark }}
+              >
                 <li>1. Download Dapp Wallet app or extension</li>
                 <li>2. Switch to Ethereum Network</li>
                 <li>3. Transfer USDT to your Dapp wallet</li>

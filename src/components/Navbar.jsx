@@ -9,8 +9,11 @@ import {
   toggle_effect,
   hamburger,
   clear,
+  USDT,
+  XRP,
+  Etherum,
 } from "../assets/";
-import { DarkMode, KeyboardArrowDown, LightMode } from "@mui/icons-material";
+import CancelSharpIcon from '@mui/icons-material/CancelSharp';import { DarkMode, KeyboardArrowDown, LightMode } from "@mui/icons-material";
 import {
   Box,
   IconButton,
@@ -274,60 +277,92 @@ const Navbar = () => {
 
   const list = (anchor) => (
     <div
-      className=""
+      className="bg-gray-900 h-full flex flex-col "
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
+      style={{background: alt}}
     >
+      {/* Close Button */}
       <div className="flex items-end justify-end cursor-pointer">
-        <img
+        {/* <img
           src={clear}
-          alt="cross_icon"
+          alt="close_icon"
           className="w-8 h-8 cursor-pointer"
           onClick={toggleDrawer(anchor, false)}
-        />{" "}
+        /> */}
+        <CancelSharpIcon sx={{color: dark, margin: "5px"}} />
       </div>
+
+      {/* Menu Content */}
       <div className="w-[100vw] max-w-[300px]">
+        {/* Logo */}
         <div className="flex justify-center items-center p-4">
           <div className="flex items-center cursor-pointer justify-center mr-20">
-            <img src={Logo} alt="" className="w-10 h-10 relative" />
+            <img src={Logo} alt="Logo" className="w-10 h-10 relative" />
             <span className="text-sm font-medium text-[#3840CD] absolute top-[68px] left-[125px]">
               BULL RUN
             </span>
           </div>
         </div>
+
+        <div className="border-t border-gray-600 my-4"></div>
+
+        {/* Token List: USDT, ETH, XBR */}
         <ul className="flex flex-col cursor-pointer items-center space-y-12 p-4">
-          {mockDataToken.map((item) => (
-            <li
-              key={item.id}
-              className="flex gap-2 items-center text-sm text-gray-500"
-            >
-              <span>{item.token}:</span>
-              <span className="text-blue-500">{item.value.toFixed(4)}</span>
-            </li>
-          ))}
+          <li className="flex gap-2 items-center text-sm text-gray-500">
+            <img src={USDT} className="w-4 h-4" />
+            <span style={{ color: dark }}>USDT:</span>
+            <span className="text-blue-500">0.0000</span>
+          </li>
+          <li className="flex gap-2 items-center text-sm text-gray-500">
+          <img src={Etherum} className="w-4 h-4" />
+            <span style={{ color: dark }}>ETH:</span>
+            <span className="text-blue-500">0.0000</span>
+          </li>
+          <li className="flex gap-2 items-center text-sm text-gray-500">
+          <img src={XRP} className="w-4 h-4" />
+            <span style={{ color: dark }}>XBR:</span>
+            <span className="text-blue-500">0.0000</span>
+          </li>
         </ul>
-        <div className="flex flex-col cursor-pointer items-center space-y-12 p-4 mt-5">
-          <div
-            className="flex items-center space-x-2 cursor-pointer transform transition-transform hover:scale-110"
-            // onClick={handleWhitelistClick}
-          >
+
+        {/* Divider Line */}
+        <div className="border-t border-gray-600 my-4"></div>
+
+        {/* Additional Options: Whitelist, Portfolio, Notifications */}
+        <div className="flex flex-col cursor-pointer items-center justify-center space-y-12 p-4">
+          {/* Whitelist */}
+          <div className="flex items-center space-x-2 cursor-pointer transform transition-transform hover:scale-110">
             <img src={Favorite} alt="Favorite Icon" className="w-4 h-4" />
-            <p className="text-sm text-[#202020]">Whitelist</p>
+            <p className="text-sm text-[#202020]" style={{ color: dark }}>
+              Whitelist
+            </p>
           </div>
+
+          {/* Portfolio */}
           <div className="flex items-center space-x-2">
             <img src={pie} alt="Pie Icon" className="w-4 h-4" />
-            <p className="text-sm">Portfolio</p>
+            <p className="text-sm" style={{ color: dark }}>
+              Portfolio
+            </p>
           </div>
-          <div className="relative">
-            <img
-              src={hasNotifications ? Notification_bold : Notification}
-              alt="Notification Icon"
-              className="w-6 h-6"
-            />
-            {hasNotifications && (
-              <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
-            )}
+
+          {/* Notifications */}
+          <div className="flex items-center space-x-2">
+            <div className="relative">
+              <img
+                src={hasNotifications ? Notification_bold : Notification}
+                alt="Notification Icon"
+                className="w-6 h-6"
+              />
+              {hasNotifications && (
+                <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
+              )}
+            </div>
+            <p className="text-sm" style={{ color: dark }}>
+              Notification
+            </p>
           </div>
         </div>
       </div>
@@ -336,7 +371,10 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="border-b" style={{ backgroundColor: alt }}>
+      <header
+        className="border-b sticky top-0 z-50"
+        style={{ backgroundColor: alt }}
+      >
         <div className="flex justify-between m-auto items-center p-3 ">
           {isMobile ? (
             <div className="flex items-center">

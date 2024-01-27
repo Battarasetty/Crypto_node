@@ -13,7 +13,7 @@ const FooterComponent = () => {
 
   return (
     <>
-      <footer className="py-8 px-4">
+      <footer className="py-4 px-4">
         {/* Mobile View */}
         <div className="md:hidden text-center">
           <div className="mb-4">
@@ -23,7 +23,7 @@ const FooterComponent = () => {
             </span>
 
             {/* Product Column */}
-            <div className="md:hidden text-center p-4 rounded-lg bg-gray-100 border-t border-gray-300 mt-4 shadow-md">
+            <div style={{background: primaryLight}} className="md:hidden text-center p-4 rounded-lg bg-[#151447] border-t border-gray-300 mt-4 shadow-md">
               <div className="flex flex-col gap-3 mt-4">
                 <p className="font-bold text-[#3840CD]">Product</p>
                 <p className="text-[12px] text-[#ABB0C1]">App</p>

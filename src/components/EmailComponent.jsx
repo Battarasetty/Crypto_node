@@ -9,7 +9,7 @@ const EmailComponent = () => {
 
   return (
     <div
-      className=""
+      className="mx-4 rounded-lg"
       style={{
         backgroundColor: primaryLight,
         boxShadow: "inset 0 2px 2px -2px rgba(21, 20, 71, 0.2), inset 0 -2px 2px -2px rgba(21, 20, 71, 0.2)",

@@ -31,6 +31,8 @@ import wallet_3 from './wallet_3.png'
 import harish from './harish.png'
 import walletconnect1 from './walletconnect1.jpg'
 import down_arrow from './down_arrow.svg'
+import Etherum from './Etherum.svg'
+import XRP from './XRP.svg'
 
 
 
@@ -67,5 +69,7 @@ export {
     wallet_3,
     harish,
     walletconnect1,
-    down_arrow
+    down_arrow,
+    Etherum,
+    XRP,
 }

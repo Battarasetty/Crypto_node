@@ -20,6 +20,7 @@ import {
   CardContent,
   Tab,
   Tabs,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
@@ -176,22 +177,26 @@ const Home = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <div className="h-screen overflow-auto" style={{ background: alt }}>
       <Navbar />
       <div className="sm:my-7">
         <div className="p-4 flex flex-col items-center mt-0 md:my-5">
           <h1
-            className="text-[15px] md:text-[28px] font-bold text-white"
+            className="text-lg md:text-2xl font-bold text-white"
             style={{ color: dark }}
           >
-            <p className="font-[300]">
-              <span className="text-[#5763F3] text-[300]">Congratulations</span>{" "}
+            <p className="font-light">
+              <span className="text-[#5763F3] font-medium">
+                Congratulations
+              </span>{" "}
               on your Node Purchase
             </p>
           </h1>
           <p
-            className="flex items-center justify-center text-md text-[13px] mt-[1px] text-white"
+            className="text-center text-sm md:text-md mt-1 text-white"
             style={{ color: dark }}
           >
             Your first step towards financial freedom is to invest in yourself,
@@ -212,7 +217,13 @@ const Home = () => {
               >
                 Personal
               </span>
-              <img src={down_arrow} alt="down_arrow" className="w-4 h-4" />
+              <img
+                src={down_arrow}
+                alt="down_arrow"
+                className={`w-4 h-4 ${
+                  isDropdownOpen ? "transform rotate-180" : ""
+                }`}
+              />
             </div>
             {isDropdownOpen && (
               <div
@@ -241,23 +252,28 @@ const Home = () => {
             )}
 
             {/* Left Box */}
+
             <Card
               sx={{
-                minWidth: "100%",
-                boxShadow: "0px 0px 4px 0px rgba(21, 20, 71, 0.2)",
-                width: "100%",
-                maxWidth: "530px",
+                minWidth: 320, // Set a minimum width for smaller screens
+                boxShadow: "0px 0px 4px 0px rgba(21, 20, 71, 0.2)", // Equal box shadow
+                width: "100%", // Full width on small screens
+                maxWidth: 530, // Limit maximum width on larger screens
+                margin: "0 auto", // Center the card horizontally
+                "@media (min-width: 768px)": {
+                  minWidth: 530, // Adjust minimum width for larger screens
+                },
               }}
             >
               <CardContent
                 sx={{
                   backgroundColor: primaryLight,
-                  height: "auto",
-                  width: "100%",
+                  height: "auto", // Set your desired height
+                  width: "100%", // Full width on small screens
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  padding: "30px",
+                  padding: "30px", // Add padding to the content
                 }}
               >
                 <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
@@ -325,7 +341,7 @@ const Home = () => {
           <div className="flex flex-col gap-3" style={{ position: "relative" }}>
             <div
               className="flex items-center gap-2 cursor-pointer"
-              onClick={toggleDropdown}
+              // onClick={toggleDropdown}
             >
               <span
                 className="text-white text-[16px] font-semibold uppercase"
@@ -337,21 +353,25 @@ const Home = () => {
             </div>
             <Card
               sx={{
-                minWidth: "100%",
-                boxShadow: "0px 0px 4px 0px rgba(21, 20, 71, 0.2)",
-                width: "100%",
-                maxWidth: "530px",
+                minWidth: 320, // Set a minimum width for smaller screens
+                boxShadow: "0px 0px 4px 0px rgba(21, 20, 71, 0.2)", // Equal box shadow
+                width: "100%", // Full width on small screens
+                maxWidth: 530, // Limit maximum width on larger screens
+                margin: "0 auto", // Center the card horizontally
+                "@media (min-width: 768px)": {
+                  minWidth: 530, // Adjust minimum width for larger screens
+                },
               }}
             >
               <CardContent
                 sx={{
                   backgroundColor: primaryLight,
-                  height: "auto",
-                  width: "100%",
+                  height: "auto", // Set your desired height
+                  width: "100%", // Full width on small screens
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  padding: "30px",
+                  padding: "30px", // Add padding to the content
                 }}
               >
                 <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
@@ -428,7 +448,11 @@ const Home = () => {
         {value === 0 && (
           <div>
             <Box
-              style={{ height: 295, width: "71vw", margin: "auto" }}
+              style={{
+                height: 295,
+                width: isSmallScreen ? "90vw" : "71vw",
+                margin: "auto",
+              }}
               className="text-white"
               sx={{
                 "& .MuiDataGrid-root": {
@@ -484,7 +508,11 @@ const Home = () => {
         {value === 1 && (
           <div>
             <Box
-              style={{ height: 295, width: "71vw", margin: "auto" }}
+              style={{
+                height: 295,
+                width: isSmallScreen ? "90vw" : "71vw",
+                margin: "auto",
+              }}
               className="text-white"
               sx={{
                 "& .MuiDataGrid-root": {

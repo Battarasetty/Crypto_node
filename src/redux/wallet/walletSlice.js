@@ -1,13 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const initialState = {
+  mode: 'light',
+  account: localStorage.getItem('connectedAccount') || 'Not connected',
+  userBalance: null,
+  providerData: null, // Adding providerData to initial state
+};
+
 const walletSlice = createSlice({
   name: 'wallet',
-  initialState: {
-    mode: 'light',
-    account: localStorage.getItem('connectedAccount') || 'Not connected',
-    // Remove the provider from the initial state
-    userBalance: null,
-  },
+  initialState,
   reducers: {
     setMode: (state) => {
       state.mode = state.mode === 'light' ? 'dark' : 'light';
@@ -27,7 +29,6 @@ const walletSlice = createSlice({
     disconnectWallet: (state) => {
       localStorage.removeItem('connectedAccount');
       state.account = 'Not connected';
-      // Remove provider data when disconnecting
       state.providerData = null;
       state.userBalance = null;
     },

@@ -28,7 +28,9 @@ import MetaMask_Fox from './MetaMask_Fox.png'
 import wallet_1 from './wallet_1.png'
 import wallet_2 from './wallet_2.png'
 import wallet_3 from './wallet_3.png'
-// import wallet_4 from './wallet_4.png'
+import harish from './harish.png'
+import walletconnect1 from './walletconnect1.jpg'
+import down_arrow from './down_arrow.svg'
 
 
 
@@ -63,5 +65,7 @@ export {
     wallet_1,
     wallet_2,
     wallet_3,
-    // wallet_4,
+    harish,
+    walletconnect1,
+    down_arrow
 }

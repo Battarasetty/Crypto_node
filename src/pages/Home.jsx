@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import FooterComponent from "../components/FooterComponent";
 import EmailComponent from "../components/EmailComponent";
 import {
+  down_arrow,
   left_1,
   left_2,
   left_3,
@@ -22,9 +23,17 @@ import {
   useTheme,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const [value, setValue] = useState(0);
+
+  const { account, provider, userBalance, mode } = useSelector(
+    (state) => state.wallet
+  );
+
+  // console.log(selectedWallet)
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -141,13 +150,39 @@ const Home = () => {
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
 
+  //  mint API function
+  const handleMintAndClaim = async () => {
+    try {
+      // Make a POST request to the mint endpoint
+      const response = await axios.post(
+        "http://152.67.7.210:9090/v1/xbr/mint",
+        {
+          toAddress: "0xA4411CeA4c282E2Ae74e74F2188828616737E89B",
+          quantity: 1,
+        }
+      );
+
+      // Handle the response as needed
+      console.log("Mint API Response:", response.data);
+    } catch (error) {
+      // Handle errors
+      console.error("Error calling mint API:", error);
+    }
+  };
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   return (
     <div className="h-screen overflow-auto" style={{ background: alt }}>
       <Navbar />
       <div className="sm:my-7">
-        <div className="p-4 flex flex-col items-center">
+        <div className="p-4 flex flex-col items-center mt-0 md:my-5">
           <h1
-            className="text-[15px] md:text-3xl font-bold text-white"
+            className="text-[15px] md:text-[28px] font-bold text-white"
             style={{ color: dark }}
           >
             <p className="font-[300]">
@@ -156,7 +191,7 @@ const Home = () => {
             </p>
           </h1>
           <p
-            className="flex items-center justify-center text-md text-[14px] text-white"
+            className="flex items-center justify-center text-md text-[13px] mt-[1px] text-white"
             style={{ color: dark }}
           >
             Your first step towards financial freedom is to invest in yourself,
@@ -166,160 +201,216 @@ const Home = () => {
 
         <div className="flex flex-col gap-5 md:flex-row justify-center py-4 px-4">
           {" "}
-          {/* Left Box */}
-          <Card
-            sx={{
-              minWidth: 275,
-              boxShadow: "0px 0px 4px 0px rgba(21, 20, 71, 0.2)", // Equal box shadow
-              width: "100%", // Full width on small screens
-              maxWidth: "530px", // Limit maximum width on larger screens
-              // margin: "0 auto", // Center the card horizontally
-            }}
-          >
-            <CardContent
+          <div className="flex flex-col gap-3" style={{ position: "relative" }}>
+            <div
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={toggleDropdown}
+            >
+              <span
+                className="text-white text-[16px] font-semibold uppercase"
+                style={{ color: dark }}
+              >
+                Personal
+              </span>
+              <img src={down_arrow} alt="down_arrow" className="w-4 h-4" />
+            </div>
+            {isDropdownOpen && (
+              <div
+                className="dropdown-content absolute top-9 left-0 bg-[#5763F3] rounded-md shadow-md overflow-hidden"
+                style={{
+                  width: "150px",
+                  height: "220px",
+                }}
+              >
+                {/* Dropdown Content */}
+                <div className="text-white text-sm flex flex-col gap-4 mt-3">
+                  <div className="px-3 mx-4 py-2 border-b border-[#222469] text-center">
+                    XBRNODE01
+                  </div>
+                  <div className="px-3 mx-4 py-2 border-b border-[#222469] text-center">
+                    XBRNODE01
+                  </div>
+                  <div className="px-3 mx-4 py-2 border-b border-[#222469] text-center">
+                    XBRNODE01
+                  </div>
+                  <div className="px-3 mx-4 py-2 border-b border-[#222469] text-center">
+                    XBRNODE01
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Left Box */}
+            <Card
               sx={{
-                backgroundColor: primaryLight,
-                height: "390px", // Set your desired height
+                minWidth: 530,
+                boxShadow: "0px 0px 4px 0px rgba(21, 20, 71, 0.2)", // Equal box shadow
                 width: "100%", // Full width on small screens
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                padding: "30px", // Add padding to the content
+                maxWidth: "530px", // Limit maximum width on larger screens
+                // margin: "0 auto", // Center the card horizontally
               }}
             >
-              <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
-                <div className="flex items-center gap-10">
-                  <img src={left_1} alt="Left 1" className="w-10 h-10" />
-                  <span className="text-[#5763F3] font-bold">
-                    MY FOUNDER'S NODES
+              <CardContent
+                sx={{
+                  backgroundColor: primaryLight,
+                  height: "390px", // Set your desired height
+                  width: "100%", // Full width on small screens
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  padding: "30px", // Add padding to the content
+                }}
+              >
+                <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
+                  <div className="flex items-center gap-10">
+                    <img src={left_1} alt="Left 1" className="w-10 h-10" />
+                    <span className="text-[#5763F3] font-bold">
+                      MY FOUNDER'S NODES
+                    </span>
+                  </div>
+                  <span className="text-white" style={{ color: dark }}>
+                    01
                   </span>
                 </div>
-                <span className="text-white" style={{ color: dark }}>
-                  01
-                </span>
-              </div>
-              <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
-                <div className="flex items-center gap-10">
-                  <img src={left_2} alt="Left 2" className="w-10 h-10" />
-                  <span className="text-[#5763F3] font-bold">XBR REWARDS</span>
-                </div>
-                <span className="text-white" style={{ color: dark }}>
-                  0.0358
-                </span>
-              </div>
-              <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
-                <div className="flex items-center gap-10">
-                  <img src={left_3} alt="Left 3" className="w-10 h-10" />
-                  <span className="text-[#5763F3] font-bold">
-                    UNCLAIMED XBR REWARDS
+                <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
+                  <div className="flex items-center gap-10">
+                    <img src={left_2} alt="Left 2" className="w-10 h-10" />
+                    <span className="text-[#5763F3] font-bold">
+                      XBR REWARDS
+                    </span>
+                  </div>
+                  <span className="text-white" style={{ color: dark }}>
+                    0.0358
                   </span>
                 </div>
-                <span className="text-white" style={{ color: dark }}>
-                  0.0145
-                </span>
-              </div>
-              <div className="flex items-center justify-between pb-2 border-b border-[#080628]">
-                <div className="flex items-center gap-10">
-                  <img src={left_4} alt="Left 4" className="w-10 h-10" />
-                  <span className="text-[#5763F3] font-bold">
-                    REFERRAL EARNINGS
+                <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
+                  <div className="flex items-center gap-10">
+                    <img src={left_3} alt="Left 3" className="w-10 h-10" />
+                    <span className="text-[#5763F3] font-bold">
+                      UNCLAIMED XBR REWARDS
+                    </span>
+                  </div>
+                  <span className="text-white" style={{ color: dark }}>
+                    0.0145
                   </span>
                 </div>
-                <span className="text-white" style={{ color: dark }}>
-                  $600.00
-                </span>
-              </div>
-              <div className="flex justify-center mt-6">
-                <button
-                  className="bg-[#22246A] text-[#5763F3] px-6 rounded-l-full"
-                  style={{ background: neutralLight }}
-                >
-                  Mint & Claim
-                </button>
-                <button
-                  className="bg-[#22246A] text-[#5763F3] py-2 px-4 rounded-r-full ml-2"
-                  style={{ background: neutralLight }}
-                >
-                  Sell a Node
-                </button>
-              </div>
-            </CardContent>
-          </Card>
-          {/* Right Box */}
-          <Card
-            sx={{
-              minWidth: 275,
-              boxShadow: "0px 0px 4px 0px rgba(21, 20, 71, 0.2)", // Equal box shadow
-              width: "100%", // Full width on small screens
-              maxWidth: "530px", // Limit maximum width on larger screens
-              // margin: "0 auto", // Center the card horizontally
-            }}
-          >
-            <CardContent
+                <div className="flex items-center justify-between pb-2 border-b border-[#080628]">
+                  <div className="flex items-center gap-10">
+                    <img src={left_4} alt="Left 4" className="w-10 h-10" />
+                    <span className="text-[#5763F3] font-bold">
+                      REFERRAL EARNINGS
+                    </span>
+                  </div>
+                  <span className="text-white" style={{ color: dark }}>
+                    $600.00
+                  </span>
+                </div>
+                <div className="flex justify-center mt-6">
+                  <button
+                    className="bg-[#22246A] text-[#5763F3] px-6 rounded-l-full"
+                    style={{ background: neutralLight }}
+                    onClick={handleMintAndClaim}
+                  >
+                    Mint & Claim
+                  </button>
+                  <button
+                    className="bg-[#22246A] text-[#5763F3] py-2 px-4 rounded-r-full ml-2"
+                    style={{ background: neutralLight }}
+                  >
+                    Sell a Node
+                  </button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="flex flex-col gap-3" style={{ position: "relative" }}>
+            <div
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={toggleDropdown}
+            >
+              <span
+                className="text-white text-[16px] font-semibold uppercase"
+                style={{ color: dark }}
+              >
+                Global
+              </span>
+              {/* <img src={down_arrow} alt="down_arrow" className="w-4 h-4" /> */}
+            </div>
+            <Card
               sx={{
-                backgroundColor: primaryLight,
-                height: "390px", // Set your desired height
+                minWidth: 530,
+                boxShadow: "0px 0px 4px 0px rgba(21, 20, 71, 0.2)", // Equal box shadow
                 width: "100%", // Full width on small screens
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                padding: "30px", // Add padding to the content
+                maxWidth: "530px", // Limit maximum width on larger screens
+                // margin: "0 auto", // Center the card horizontally
               }}
             >
-              <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
-                <div className="flex items-center gap-10">
-                  <img src={left_1} alt="Left 1" className="w-10 h-10" />
-                  <span className="text-[#5763F3] font-bold">
-                    GLOBEL FOUNDER'S NODES
+              <CardContent
+                sx={{
+                  backgroundColor: primaryLight,
+                  height: "390px", // Set your desired height
+                  width: "100%", // Full width on small screens
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  padding: "30px", // Add padding to the content
+                }}
+              >
+                <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
+                  <div className="flex items-center gap-10">
+                    <img src={left_1} alt="Left 1" className="w-10 h-10" />
+                    <span className="text-[#5763F3] font-bold">
+                      GLOBEL FOUNDER'S NODES
+                    </span>
+                  </div>
+                  <span className="text-white" style={{ color: dark }}>
+                    01
                   </span>
                 </div>
-                <span className="text-white" style={{ color: dark }}>
-                  01
-                </span>
-              </div>
-              <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
-                <div className="flex items-center gap-10">
-                  <img src={left_2} alt="Left 2" className="w-10 h-10" />
-                  <span className="text-[#5763F3] font-bold">
-                    AVALIABLE FOUNDER'S NODES
+                <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
+                  <div className="flex items-center gap-10">
+                    <img src={left_2} alt="Left 2" className="w-10 h-10" />
+                    <span className="text-[#5763F3] font-bold">
+                      AVALIABLE FOUNDER'S NODES
+                    </span>
+                  </div>
+                  <span className="text-white" style={{ color: dark }}>
+                    0.0358
                   </span>
                 </div>
-                <span className="text-white" style={{ color: dark }}>
-                  0.0358
-                </span>
-              </div>
-              <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
-                <div className="flex items-center gap-10">
-                  <img src={left_3} alt="Left 3" className="w-10 h-10" />
-                  <span className="text-[#5763F3] font-bold">
-                    XBR REWARDS DISTRIBUTED
+                <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
+                  <div className="flex items-center gap-10">
+                    <img src={left_3} alt="Left 3" className="w-10 h-10" />
+                    <span className="text-[#5763F3] font-bold">
+                      XBR REWARDS DISTRIBUTED
+                    </span>
+                  </div>
+                  <span className="text-white" style={{ color: dark }}>
+                    0.0145
                   </span>
                 </div>
-                <span className="text-white" style={{ color: dark }}>
-                  0.0145
-                </span>
-              </div>
-              <div className="flex items-center justify-between pb-2 border-b border-[#080628]">
-                <div className="flex items-center gap-10">
-                  <img src={left_4} alt="Left 4" className="w-10 h-10" />
-                  <span className="text-[#5763F3] font-bold">
-                    0x7c8f749d5fe60229fcd...
+                <div className="flex items-center justify-between pb-2 border-b border-[#080628]">
+                  <div className="flex items-center gap-10">
+                    <img src={left_4} alt="Left 4" className="w-10 h-10" />
+                    <span className="text-[#5763F3] font-bold">
+                      0x7c8f749d5fe60229fcd...
+                    </span>
+                  </div>
+                  <span className="text-white" style={{ color: dark }}>
+                    $600.00
                   </span>
                 </div>
-                <span className="text-white" style={{ color: dark }}>
-                  $600.00
-                </span>
-              </div>
-              <div className="flex justify-center mt-6">
-                <button
-                  className="bg-[#22246A] text-[#5763F3] py-2 px-8 rounded-full"
-                  style={{ background: neutralLight }}
-                >
-                  Buy a Node
-                </button>
-              </div>
-            </CardContent>
-          </Card>
+                <div className="flex justify-center mt-6">
+                  <button
+                    className="bg-[#22246A] text-[#5763F3] py-2 px-8 rounded-full"
+                    style={{ background: neutralLight }}
+                  >
+                    Buy a Node
+                  </button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* Centered Tabs Box */}
@@ -350,7 +441,7 @@ const Home = () => {
                   borderBottom: "none", // Remove bottom border for cells
                 },
                 "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: alt, // Set the desired color
+                  backgroundColor: primaryLight, // Set the desired color
                   color: dark,
                   border: "none",
                 },
@@ -406,7 +497,7 @@ const Home = () => {
                   borderBottom: "none",
                 },
                 "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: alt,
+                  backgroundColor: primaryLight, // Set the desired color
                   color: dark,
                   border: "none",
                 },

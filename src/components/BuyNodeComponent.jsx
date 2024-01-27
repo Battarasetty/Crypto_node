@@ -29,6 +29,8 @@ import {
 } from "../redux/wallet/walletSlice.js";
 import { IconButton, useTheme } from "@mui/material";
 import { DarkMode, LightMode } from "@mui/icons-material";
+import axios from "axios";
+import { setSelectedWallet } from "../redux/theme/themeSlice.js";
 
 const PriceControls = ({ quantity, onIncrement, onDecrement }) => {
   let disableDecrease = quantity > 1;
@@ -72,7 +74,7 @@ const PriceControls = ({ quantity, onIncrement, onDecrement }) => {
   );
 };
 
-const WalletItem = ({ src, text, onClick }) => {
+const WalletItem = ({ src, text, onClick, walletName }) => {
   const theme = useTheme();
   // console.log(theme.palette.mode);
   const neutralLight = theme.palette.neutral.light;
@@ -84,13 +86,14 @@ const WalletItem = ({ src, text, onClick }) => {
   return (
     <div
       className="wallet-item flex items-center justify-between gap-2 w-full p-3 cursor-pointer transition duration-300 ease-in-out transform hover:bg-[#2B2E80] hover:shadow-md"
-      onClick={onClick}
+      onClick={() => onClick(walletName)}
     >
       <div className="flex items-center gap-5">
         <img
           src={src}
           alt={alt}
           className="w-10 h-10 md:w-12 md:h-12 text-red-600"
+          style={{color: dark}}
         />
         <span className={`text-lg text-[#FFFFFF]`} style={{ color: dark }}>
           {text}
@@ -103,7 +106,11 @@ const WalletItem = ({ src, text, onClick }) => {
 
 const BuyNodeComponent = () => {
   const dispatch = useDispatch();
-  const { account, provider } = useSelector((state) => state.wallet);
+  const { account, provider, userBalance, mode } = useSelector(
+    (state) => state.wallet
+  );
+
+  // console.log(selectedWallet);
   const navigate = useNavigate();
 
   const [step, setStep] = useState(1);
@@ -129,7 +136,10 @@ const BuyNodeComponent = () => {
   // console.log(referralBonus);
   // console.log(remainingAmount);
 
-  const handleConnectWallet = async () => {
+  const handleConnectWallet = async (walletName) => {
+    console.log("calling", walletName);
+    dispatch(setSelectedWallet(walletName));
+
     try {
       const { ethereum } = window;
       if (!ethereum) {
@@ -144,9 +154,14 @@ const BuyNodeComponent = () => {
       const selectedAccount = accounts[0];
       const newProvider = new ethers.providers.Web3Provider(window.ethereum);
 
-      dispatch(setAccount(selectedAccount));
-      dispatch(setProvider(newProvider));
+      // Extract necessary serializable data from newProvider
+      const providerData = {
+        network: newProvider._network,
+      };
+
+      dispatch(setProvider(providerData));
       dispatch(setUserBalance(null));
+      dispatch(setAccount(selectedAccount));
 
       localStorage.setItem("connectedAccount", selectedAccount);
 
@@ -154,6 +169,7 @@ const BuyNodeComponent = () => {
       const isValidReferralAddress = validateReferralAddress(referralAddress);
 
       if (isValidReferralAddress) {
+        console.log("calling1");
         await transferUSDTWithReferral(
           recipient,
           amount,
@@ -162,12 +178,40 @@ const BuyNodeComponent = () => {
           selectedAccount
         );
       } else {
+        console.log("calling2");
         await transferUSDT(recipient, amount, newProvider, selectedAccount);
       }
+
+      const transactionDetails = {
+        fromAddress: "senderAddressValue",
+        toAddress: recipient,
+        txHash: "transactionHashValue",
+        nodesQuantity: 5,
+        totalAmount: 1000,
+        amountToOwner: 900,
+        referralWalletAddress: referralAddress,
+        amountToReferralWallet: 100,
+      };
+
+      // Store the USDT transaction details in the backend database
+      await storeUSDTTransactionDetails(transactionDetails);
 
       navigate("/home");
     } catch (error) {
       console.log("Metamask Already Unlocked, Connecting....");
+    }
+  };
+
+  const storeUSDTTransactionDetails = async (transactionDetails) => {
+    try {
+      // Make an API call to your backend server to store the transaction details
+      const response = await axios.post(
+        "http://152.67.7.210:9090/v1/xbr/usdt-transaction",
+        transactionDetails
+      );
+      console.log("Transaction details stored successfully:", response.data);
+    } catch (error) {
+      console.error("Error storing transaction details:", error);
     }
   };
 
@@ -201,21 +245,38 @@ const BuyNodeComponent = () => {
     }));
   };
 
+  // API FUNCTION FOR VERIFY-REFERAL-WALLET
+  const verifyReferralWallet = async (referralAddress) => {
+    console.log(referralAddress);
+    try {
+      // Make POST request to the verify-referral-wallet endpoint
+      const response = await axios.post(
+        "http://152.67.7.210:9090/v1/xbr/verify-referral-wallet",
+        {
+          referralWalletAddress: referralAddress,
+        }
+      );
+
+      console.log(response.data);
+    } catch (error) {
+      console.log("harish");
+      console.error("Error verifying referral wallet:", error);
+    }
+  };
+
   const handleReferralInputChange = (e) => {
     const newReferralAddress = e.target.value;
 
     setReferralAddress(newReferralAddress);
-
     const isValid = validateReferralAddress(newReferralAddress);
     setIsValidReferral(isValid);
+
+    verifyReferralWallet(newReferralAddress);
   };
 
   const handleProceed = () => {
     if (checkBoxes.terms1 && checkBoxes.terms2 && checkBoxes.terms3) {
-      if (
-        !referralAddress ||
-        validateReferralAddress(referralAddress)
-      ) {
+      if (!referralAddress || validateReferralAddress(referralAddress)) {
         setStep(2);
       } else {
         console.log(
@@ -363,12 +424,16 @@ const BuyNodeComponent = () => {
           {/* Remaining Steps */}
           <div className="mt-8 flex flex-col gap-2 md:gap-4">
             <div>
-              <div className="border py-[6px] px-4 rounded-lg focus-within:border-[#5763F3]">
+              <div
+                className="border py-[6px] px-4 rounded-lg focus-within:border-[#5763F3]"
+                style={{ borderColor: dark }}
+              >
                 <input
                   type="text"
                   placeholder="ENTER REFERRAL ADDRESS"
                   className="w-full text-[#46245F] text-[8px] md:text-[13px] p-[3px] rounded-lg focus:outline-none bg-transparent"
                   value={referralAddress}
+                  // style={{border: dark}}
                   onChange={handleReferralInputChange}
                 />
               </div>
@@ -448,21 +513,28 @@ const BuyNodeComponent = () => {
                 // alt="Metamask"
                 text="Metamask"
                 onClick={handleConnectWallet}
+                walletName="Metamask"
               />
               <WalletItem
                 src={trust_wallet}
                 // alt="Trust Wallet"
                 text="Trust Wallet"
+                onClick={handleConnectWallet}
+                walletName="TrustWallet"
               />
               <WalletItem
                 src={wallet_connect}
                 // alt="Connect Wallet"
                 text="Connect Wallet"
+                onClick={handleConnectWallet}
+                walletName="ConnectWallet"
               />
               <WalletItem
                 src={other_wallet}
                 // alt="Other Wallet"
                 text="Other Wallet"
+                onClick={handleConnectWallet}
+                walletName="otherWallet"
               />
             </div>
 

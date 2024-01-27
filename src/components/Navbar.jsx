@@ -32,6 +32,7 @@ import {
   setUserBalance,
   setMode,
 } from "../redux/wallet/walletSlice";
+import MenuIcon from "@mui/icons-material/Menu";
 import { ethers } from "ethers";
 
 const Navbar = () => {
@@ -51,6 +52,10 @@ const Navbar = () => {
   const { account, provider, userBalance, mode } = useSelector(
     (state) => state.wallet
   );
+
+  // const { selectedWallet } = useSelector((state) => state.theme.selectedWallet);
+
+  // console.log(selectedWallet);
 
   const theme = useTheme();
   const neutralLight = theme.palette.neutral.light;
@@ -141,6 +146,19 @@ const Navbar = () => {
     // Add similar logic for other responsive state variables if needed
   }, [windowSize]);
 
+  const [dropdownContentWidth, setDropdownContentWidth] = useState(170); // Set initial width
+
+  // Function to calculate the width of the dropdown content
+  const calculateDropdownContentWidth = () => {
+    const contentWidth = dropdownRef.current.offsetWidth; // Adjust this based on your content
+    setDropdownContentWidth(contentWidth);
+  };
+
+  // Call the function to calculate the width when necessary
+  useEffect(() => {
+    calculateDropdownContentWidth();
+  }, [selectedOption]); // Up
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -216,7 +234,12 @@ const Navbar = () => {
 
         // Set the provider when the account changes
         const newProvider = new ethers.providers.Web3Provider(window.ethereum);
-        dispatch(setProvider(newProvider));
+        const providerData = {
+          network: newProvider._network, // Example: You can extract necessary properties
+        };
+
+        // Dispatch only serializable provider data
+        dispatch(setProvider(providerData));
       } else {
         // dispatch(setAccount("Not connected")); // This will update the Redux store
         localStorage.removeItem("connectedAccount"); // This will remove the wallet address from local storage
@@ -233,7 +256,11 @@ const Navbar = () => {
       const initialProvider = new ethers.providers.Web3Provider(
         window.ethereum
       );
-      dispatch(setProvider(initialProvider));
+      const providerData = {
+        network: initialProvider._network, // Example: You can extract necessary properties
+      };
+
+      dispatch(setProvider(providerData));
 
       // Subscribe to account changes
       ethereum.on("accountsChanged", handleAccountsChanged);
@@ -313,23 +340,28 @@ const Navbar = () => {
         <div className="flex justify-between m-auto items-center p-3 ">
           {isMobile ? (
             <div className="flex items-center">
-              <div className="flex flex-col items-center cursor-pointer">
-                <img src={Logo} alt="" className="w-12 h-12 relative" />
-                <span className="text-sm font-medium text-[#3840CD] absolute top-[38px] left-[50px]">
-                  BULL RUN
-                </span>
+              <div className="flex flex-col items-center cursor-pointer relative">
+                <img src={Logo} alt="" className="w-10 h-10 relative" />
+                <div className="flex items-center absolute top-[23px] left-[33px]">
+                  <span className="text-[10px] font-medium text-[#3840CD]">
+                    BULL
+                  </span>
+                  <span className="text-[10px] font-medium text-[#3840CD]">
+                    RUN
+                  </span>
+                </div>
               </div>
             </div>
           ) : (
             <div className="flex items-center">
               <Link to="/">
                 <div className="flex flex-col items-center relative">
-                  <img src={Logo} alt="" className="w-12 h-12 relative" />
-                  <div className="flex items-center absolute top-[27px] left-[38px]">
-                    <span className="text-sm font-medium text-[#3840CD]">
+                  <img src={Logo} alt="" className="w-10 h-10 relative" />
+                  <div className="flex items-center absolute top-[24px] left-[35px]">
+                    <span className="text-[10px] font-medium text-[#3840CD]">
                       BULL
                     </span>
-                    <span className="text-sm font-medium text-[#3840CD]">
+                    <span className="text-[10px] font-medium text-[#3840CD]">
                       RUN
                     </span>
                   </div>
@@ -397,7 +429,6 @@ const Navbar = () => {
               {!isMobile && (
                 <div
                   className="flex ml-2 items-center justify-center gap-[4px] cursor-pointer"
-                  //  onClick={handleDropdownChange}
                   style={{
                     backgroundColor: "transparent",
                     padding: "6px",
@@ -469,7 +500,6 @@ const Navbar = () => {
                     border: `2px solid ${
                       isDropdownOpen ? "#1890ff" : "#808080"
                     }`,
-                    width: "170px",
                     boxShadow: isDropdownOpen
                       ? "0px 4px 8px rgba(0, 0, 0, 0.1)"
                       : "none",
@@ -491,7 +521,10 @@ const Navbar = () => {
                 </div>
 
                 {isDropdownOpen && (
-                  <div className="absolute w-[170px] top-full left-0 z-10 border text-white border-gray-300 shadow-md max-h-36 overflow-y-auto mt-2 rounded-md">
+                  <div
+                    className="absolute top-full left-0 z-10 border text-white border-gray-300 shadow-md max-h-36 overflow-y-auto mt-2 rounded-md"
+                    style={{ width: `${dropdownContentWidth}px` }}
+                  >
                     {selectedOption === "Pool Participants" ? (
                       <div
                         onClick={() => handleOptionClick("Pool Creator")}
@@ -553,7 +586,7 @@ const Navbar = () => {
                 {isDropdownOpen2 && (
                   <div
                     style={{ backgroundColor: alt }}
-                    className="absolute w-[170px] top-full left-0 z-10 border text-white border-gray-300 shadow-md max-h-36 overflow-y-auto mt-2 rounded-md scrollbar-hide"
+                    className="absolute top-full left-0 z-10 border text-white border-gray-300 shadow-md max-h-36 overflow-y-auto mt-2 rounded-md scrollbar-hide"
                   >
                     {options2.map((option, index) => (
                       <div
@@ -571,12 +604,16 @@ const Navbar = () => {
 
               <div className="flex items-center">
                 {/* Account Button */}
-                <div className="text-white">
+                {/* <div className="text-white">
                   <button
-                    className={`p-1.5 border-none border-2 rounded-lg bg-blue-500 text-white ${
+                    className={`border-none border-2 rounded-lg bg-blue-500 text-white ${
                       isMobile ? "rounded-full" : ""
                     }`}
                     onClick={openPopup}
+                    style={{
+                      padding: "6px",
+                      width: "40px", // Adjusted width for mobile
+                    }}
                   >
                     {account && (
                       <>
@@ -587,6 +624,15 @@ const Navbar = () => {
                     )}
                   </button>
                 </div>
+                 */}
+
+                <button
+                  class="flex items-center justify-center px-4 py-1 rounded-md transition duration-300 ease-in-out hover:bg-yellow-500 hover:text-white border-2 border-yellow-500
+              md:border-2 md:border-[#D9893A] md:px-4 md:py-1.5 md:rounded-md md:transition md:duration-300 md:ease-in-out"
+                >
+                  <span class="hidden md:inline">MetaMask</span>
+                  <span class="md:hidden">M</span>
+                </button>
 
                 {/* Mode Switch and Hamburger Icon */}
                 <div className="flex items-center">
@@ -599,10 +645,8 @@ const Navbar = () => {
                   </IconButton>
                   {/* Hamburger Icon for Mobile */}
                   {isMobile && (
-                    <img
-                      src={hamburger}
-                      alt="hamburger_menu"
-                      className="w-8 h-8 cursor-pointer"
+                    <MenuIcon
+                      sx={{ cursor: "pointer" }}
                       onClick={toggleDrawer("right", true)}
                     />
                   )}

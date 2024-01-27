@@ -243,22 +243,21 @@ const Home = () => {
             {/* Left Box */}
             <Card
               sx={{
-                minWidth: 530,
-                boxShadow: "0px 0px 4px 0px rgba(21, 20, 71, 0.2)", // Equal box shadow
-                width: "100%", // Full width on small screens
-                maxWidth: "530px", // Limit maximum width on larger screens
-                // margin: "0 auto", // Center the card horizontally
+                minWidth: "100%",
+                boxShadow: "0px 0px 4px 0px rgba(21, 20, 71, 0.2)",
+                width: "100%",
+                maxWidth: "530px",
               }}
             >
               <CardContent
                 sx={{
                   backgroundColor: primaryLight,
-                  height: "390px", // Set your desired height
-                  width: "100%", // Full width on small screens
+                  height: "auto",
+                  width: "100%",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  padding: "30px", // Add padding to the content
+                  padding: "30px",
                 }}
               >
                 <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
@@ -338,22 +337,21 @@ const Home = () => {
             </div>
             <Card
               sx={{
-                minWidth: 530,
-                boxShadow: "0px 0px 4px 0px rgba(21, 20, 71, 0.2)", // Equal box shadow
-                width: "100%", // Full width on small screens
-                maxWidth: "530px", // Limit maximum width on larger screens
-                // margin: "0 auto", // Center the card horizontally
+                minWidth: "100%",
+                boxShadow: "0px 0px 4px 0px rgba(21, 20, 71, 0.2)",
+                width: "100%",
+                maxWidth: "530px",
               }}
             >
               <CardContent
                 sx={{
                   backgroundColor: primaryLight,
-                  height: "390px", // Set your desired height
-                  width: "100%", // Full width on small screens
+                  height: "auto",
+                  width: "100%",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  padding: "30px", // Add padding to the content
+                  padding: "30px",
                 }}
               >
                 <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">

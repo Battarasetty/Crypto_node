@@ -177,15 +177,19 @@ const Home = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const handleDropdownClose = () => {
+    setIsDropdownOpen(false);
+  };
+
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <div className="h-screen overflow-auto" style={{ background: alt }}>
       <Navbar />
       <div className="sm:my-7">
-        <div className="p-4 flex flex-col items-center mt-0 md:my-5">
+        <div className="p-4 flex flex-col items-center mt-0 md:my-10">
           <h1
-            className="text-lg md:text-2xl font-bold text-white"
+            className="text-lg md:text-3xl font-bold text-white"
             style={{ color: dark }}
           >
             <p className="font-light">
@@ -196,15 +200,16 @@ const Home = () => {
             </p>
           </h1>
           <p
-            className="text-center text-sm md:text-md mt-1 text-white"
+            className="text-center text-sm md:text-[14px] mt-1 text-white"
             style={{ color: dark }}
-          >
-            Your first step towards financial freedom is to invest in yourself,
-            through X Bull Run.
+            >
+            Your first step towards{" "}
+            <span className="font-bold">financial freedom</span> is to invest in
+            yourself, through X Bull Run.
           </p>
         </div>
 
-        <div className="flex flex-col gap-5 md:flex-row justify-center py-4 px-4">
+        <div className="flex flex-col gap-5 md:flex-row justify-center px-4">
           {" "}
           <div className="flex flex-col gap-3" style={{ position: "relative" }}>
             <div
@@ -212,7 +217,7 @@ const Home = () => {
               onClick={toggleDropdown}
             >
               <span
-                className="text-white text-[16px] font-semibold uppercase"
+                className="text-white text-[16px] font-[400] uppercase"
                 style={{ color: dark }}
               >
                 Personal
@@ -234,17 +239,29 @@ const Home = () => {
                 }}
               >
                 {/* Dropdown Content */}
-                <div className="text-white text-sm flex flex-col gap-4 mt-3">
-                  <div className="px-3 mx-4 py-2 border-b border-[#222469] text-center">
+                <div className="text-white text-sm flex flex-col gap-4 mt-3 cursor-pointer">
+                  <div
+                    className="px-3 mx-4 py-2 border-b border-[#222469] text-center"
+                    onClick={handleDropdownClose} // Close dropdown on item click
+                  >
                     XBRNODE01
                   </div>
-                  <div className="px-3 mx-4 py-2 border-b border-[#222469] text-center">
+                  <div
+                    className="px-3 mx-4 py-2 border-b border-[#222469] text-center"
+                    onClick={handleDropdownClose} // Close dropdown on item click
+                  >
                     XBRNODE01
                   </div>
-                  <div className="px-3 mx-4 py-2 border-b border-[#222469] text-center">
+                  <div
+                    className="px-3 mx-4 py-2 border-b border-[#222469] text-center"
+                    onClick={handleDropdownClose} // Close dropdown on item click
+                  >
                     XBRNODE01
                   </div>
-                  <div className="px-3 mx-4 py-2 border-b border-[#222469] text-center">
+                  <div
+                    className="px-3 mx-4 py-2 border-b border-[#222469] text-center"
+                    onClick={handleDropdownClose} // Close dropdown on item click
+                  >
                     XBRNODE01
                   </div>
                 </div>
@@ -289,7 +306,7 @@ const Home = () => {
                 </div>
                 <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
                   <div className="flex items-center gap-10">
-                    <img src={left_2} alt="Left 2" className="w-10 h-10" />
+                    <img src={left_3} alt="Left 3" className="w-10 h-10" />
                     <span className="text-[#5763F3] font-bold">
                       XBR REWARDS
                     </span>
@@ -300,7 +317,7 @@ const Home = () => {
                 </div>
                 <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
                   <div className="flex items-center gap-10">
-                    <img src={left_3} alt="Left 3" className="w-10 h-10" />
+                    <img src={left_2} alt="Left 2" className="w-10 h-10" />
                     <span className="text-[#5763F3] font-bold">
                       UNCLAIMED XBR REWARDS
                     </span>
@@ -344,7 +361,7 @@ const Home = () => {
               // onClick={toggleDropdown}
             >
               <span
-                className="text-white text-[16px] font-semibold uppercase"
+                className="text-white text-[16px] font-[400] uppercase"
                 style={{ color: dark }}
               >
                 Global
@@ -376,46 +393,46 @@ const Home = () => {
               >
                 <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
                   <div className="flex items-center gap-10">
-                    <img src={left_1} alt="Left 1" className="w-10 h-10" />
+                    <img src={right_1} alt="Left 1" className="w-10 h-10" />
                     <span className="text-[#5763F3] font-bold">
                       GLOBEL FOUNDER'S NODES
                     </span>
                   </div>
                   <span className="text-white" style={{ color: dark }}>
-                    01
+                    5000
                   </span>
                 </div>
                 <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
                   <div className="flex items-center gap-10">
-                    <img src={left_2} alt="Left 2" className="w-10 h-10" />
+                    <img src={right_2} alt="Left 2" className="w-10 h-10" />
                     <span className="text-[#5763F3] font-bold">
                       AVALIABLE FOUNDER'S NODES
                     </span>
                   </div>
                   <span className="text-white" style={{ color: dark }}>
-                    0.0358
+                    2578
                   </span>
                 </div>
                 <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#080628]">
                   <div className="flex items-center gap-10">
-                    <img src={left_3} alt="Left 3" className="w-10 h-10" />
+                    <img src={right_3} alt="Left 3" className="w-10 h-10" />
                     <span className="text-[#5763F3] font-bold">
                       XBR REWARDS DISTRIBUTED
                     </span>
                   </div>
                   <span className="text-white" style={{ color: dark }}>
-                    0.0145
+                    10.56 XBR
                   </span>
                 </div>
                 <div className="flex items-center justify-between pb-2 border-b border-[#080628]">
                   <div className="flex items-center gap-10">
-                    <img src={left_4} alt="Left 4" className="w-10 h-10" />
+                    <img src={right_4} alt="Left 4" className="w-10 h-10" />
                     <span className="text-[#5763F3] font-bold">
                       0x7c8f749d5fe60229fcd...
                     </span>
                   </div>
                   <span className="text-white" style={{ color: dark }}>
-                    $600.00
+                    Referal Add
                   </span>
                 </div>
                 <div className="flex justify-center mt-6">
@@ -432,7 +449,7 @@ const Home = () => {
         </div>
 
         {/* Centered Tabs Box */}
-        <div className="w-[71vw] mx-auto">
+        <div className="w-[71vw] mx-auto mt-0 md:mt-10">
           <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 2 }}>
             <Tabs
               value={value}

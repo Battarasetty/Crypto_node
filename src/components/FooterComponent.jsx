@@ -123,7 +123,7 @@ const FooterComponent = () => {
       >
         <p className="text-[12px] text-white" style={{ color: dark }}>
           Copyright © 2024 Designed by Entitled
-          <b className="text-[#c2aaaa]">arts</b>. All rights reserved.
+          <b className="text-[#c2aaaa]" style={{color: dark}}>arts</b>. All rights reserved.
         </p>
       </div>
     </>

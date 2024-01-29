@@ -26,6 +26,7 @@ import {
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { setQuantity } from "../redux/quantity/quantitySlice";
 
 const Home = () => {
   const [value, setValue] = useState(0);
@@ -33,6 +34,9 @@ const Home = () => {
   const { account, provider, userBalance, mode } = useSelector(
     (state) => state.wallet
   );
+
+  const quantity = useSelector(setQuantity);
+  console.log(quantity);
 
   // console.log(account)
 
@@ -157,13 +161,11 @@ const Home = () => {
   const handleMintAndClaim = async () => {
     try {
       // Make a POST request to the mint endpoint
-      const response = await axios.post(
-        `${process.env.REACT_APP_MINT_API}`,
-        {
-          toAddress: account,
-          quantity: 1,
-        }
-      );
+      const response = await axios.post(`${process.env.REACT_APP_MINT_API}`, {
+        // account :- The person who is connected to metamask address
+        toAddress: account,
+        quantity: quantity,
+      });
 
       // Handle the response as needed
       console.log("Mint API Response:", response.data);
@@ -204,7 +206,7 @@ const Home = () => {
           <p
             className="text-center text-sm md:text-[14px] mt-1 text-white"
             style={{ color: dark }}
-            >
+          >
             Your first step towards{" "}
             <span className="font-bold">financial freedom</span> is to invest in
             yourself, through X Bull Run.

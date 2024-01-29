@@ -31,8 +31,13 @@ import { IconButton, useTheme } from "@mui/material";
 import { DarkMode, LightMode } from "@mui/icons-material";
 import axios from "axios";
 import { setSelectedWallet } from "../redux/theme/themeSlice.js";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  increment,
+  decrement,
+  setQuantity,
+} from "../redux/quantity/quantitySlice.js";
 
 const PriceControls = ({ quantity, onIncrement, onDecrement }) => {
   let disableDecrease = quantity > 1;
@@ -98,6 +103,8 @@ const WalletItem = ({ icon, text, onClick, walletName }) => {
 
 const BuyNodeComponent = () => {
   const dispatch = useDispatch();
+  const  quantity  = useSelector(setQuantity);
+  // console.log(quantity);
   const { account, provider, userBalance, mode } = useSelector(
     (state) => state.wallet
   );
@@ -106,7 +113,7 @@ const BuyNodeComponent = () => {
   const navigate = useNavigate();
 
   const [step, setStep] = useState(1);
-  const [quantity, setQuantity] = useState(1);
+  // const [quantity, setQuantity] = useState(1);
   const [checkBoxes, setCheckBoxes] = useState({
     terms1: false,
     terms2: false,
@@ -233,9 +240,10 @@ const BuyNodeComponent = () => {
       }
 
       // Increase the quantity by 1, but not exceeding 10
-      let newQuantity = Math.min(quantity + 1, 10);
+      // let newQuantity = Math.min(quantity + 1, 10);
 
-      setQuantity(newQuantity);
+      // setQuantity(newQuantity);
+      dispatch(increment());
 
       return newPrice;
     });
@@ -243,8 +251,9 @@ const BuyNodeComponent = () => {
 
   const handleDecrement = () => {
     setAmount((prevPrice) => (prevPrice > 1000 ? prevPrice - 1000 : 1000));
+    dispatch(decrement());
 
-    setQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1));
+    // setQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1));
   };
 
   const handleCheckBoxChange = (name) => {
@@ -535,9 +544,9 @@ const BuyNodeComponent = () => {
                         transform="translate(-96.53 0)"
                         fill="#e2761b"
                         stroke="#e2761b"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1"
                       />
                       <path
                         id="Path_2445"
@@ -546,9 +555,9 @@ const BuyNodeComponent = () => {
                         transform="translate(-1.42 0)"
                         fill="#e4761b"
                         stroke="#e4761b"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1"
                       />
                       <path
                         id="Path_2446"
@@ -557,9 +566,9 @@ const BuyNodeComponent = () => {
                         transform="translate(-37.855 -45.899)"
                         fill="#e4761b"
                         stroke="#e4761b"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1"
                       />
                       <path
                         id="Path_2447"
@@ -568,9 +577,9 @@ const BuyNodeComponent = () => {
                         transform="translate(-50.698 -132.086)"
                         fill="#d7c1b3"
                         stroke="#d7c1b3"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1"
                       />
                       <path
                         id="Path_2448"
@@ -579,9 +588,9 @@ const BuyNodeComponent = () => {
                         transform="translate(-53.267 -95.043)"
                         fill="#233447"
                         stroke="#233447"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1"
                       />
                       <path
                         id="Path_2449"
@@ -590,9 +599,9 @@ const BuyNodeComponent = () => {
                         transform="translate(-32.785 -85.579)"
                         fill="#cd6116"
                         stroke="#cd6116"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1"
                       />
                       <path
                         id="Path_2450"
@@ -601,9 +610,9 @@ const BuyNodeComponent = () => {
                         transform="translate(-37.855 -85.579)"
                         fill="#e4751f"
                         stroke="#e4751f"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1"
                       />
                       <path
                         id="Path_2451"
@@ -612,9 +621,9 @@ const BuyNodeComponent = () => {
                         transform="translate(-53.267 -101.194)"
                         fill="#f6851b"
                         stroke="#f6851b"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1"
                       />
                       <path
                         id="Path_2452"
@@ -623,9 +632,9 @@ const BuyNodeComponent = () => {
                         transform="translate(-50.698 -143.24)"
                         fill="#c0ad9e"
                         stroke="#c0ad9e"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1"
                       />
                       <path
                         id="Path_2453"
@@ -634,9 +643,9 @@ const BuyNodeComponent = () => {
                         transform="translate(-71.857 -129.856)"
                         fill="#161616"
                         stroke="#161616"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1"
                       />
                       <path
                         id="Path_2454"
@@ -645,9 +654,9 @@ const BuyNodeComponent = () => {
                         transform="translate(0 0)"
                         fill="#763d16"
                         stroke="#763d16"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1"
                       />
                       <path
                         id="Path_2455"
@@ -656,9 +665,9 @@ const BuyNodeComponent = () => {
                         transform="translate(-1.42 -20.482)"
                         fill="#f6851b"
                         stroke="#f6851b"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1"
                       />
                     </g>
                   </svg>
@@ -747,8 +756,8 @@ const BuyNodeComponent = () => {
                         transform="translate(1981.38 1049.623)"
                         fill={dark}
                         stroke="#fff"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                       />
                       <path
                         id="Path_2459"
@@ -757,8 +766,8 @@ const BuyNodeComponent = () => {
                         transform="translate(1981.38 1048.883)"
                         fill={dark}
                         stroke="#fff"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                       />
                       <path
                         id="Path_2460"
@@ -767,8 +776,8 @@ const BuyNodeComponent = () => {
                         transform="translate(1989.845 1052.826)"
                         fill={dark}
                         stroke="#fff"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                       />
                       <path
                         id="Path_2461"
@@ -777,8 +786,8 @@ const BuyNodeComponent = () => {
                         transform="translate(1983.182 1047.854)"
                         fill={dark}
                         stroke="#fff"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                       />
                       <path
                         id="Path_2462"

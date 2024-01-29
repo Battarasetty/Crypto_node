@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { themeSettings } from './theme';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   const { mode } = useSelector((state) => state.wallet);
@@ -20,19 +22,16 @@ const App = () => {
         <Routes>
           <Route
             path="/"
-            element={
-              <BuyNodeComponent />
-            }
+            element={<BuyNodeComponent />}
           />
           {/* <Route path="/connect-wallet" element={<ConnectWalletComponent />} /> */}
           <Route
             path="/home"
-            element={
-              <Home />
-            }
+            element={<Home />}
           />
         </Routes>
       </Router>
+      <ToastContainer position="top-right" />
     </ThemeProvider>
   );
 };

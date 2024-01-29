@@ -31,6 +31,8 @@ import { IconButton, useTheme } from "@mui/material";
 import { DarkMode, LightMode } from "@mui/icons-material";
 import axios from "axios";
 import { setSelectedWallet } from "../redux/theme/themeSlice.js";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const PriceControls = ({ quantity, onIncrement, onDecrement }) => {
   let disableDecrease = quantity > 1;
@@ -113,9 +115,13 @@ const BuyNodeComponent = () => {
   const [recipientError, setRecipientError] = useState("");
   const [amountError, setAmountError] = useState("");
 
-  const [recipient, setRecipient] = useState(
-    "0xE8101C518a6fD0C60dFE5e09E8F82bfC10634f1e"
-  );
+  // const [recipient, setRecipient] = useState(
+  //   "0xE8101C518a6fD0C60dFE5e09E8F82bfC10634f1e"
+  // );
+
+  const recipient = process.env.REACT_APP_RECIPIENT_ADDRESS;
+  // console.log(recipient);
+
   const [amount, setAmount] = useState(1000);
   const [referralAddress, setReferralAddress] = useState("");
   const [isValidReferral, setIsValidReferral] = useState(false);
@@ -166,10 +172,23 @@ const BuyNodeComponent = () => {
           referralAddress,
           newProvider,
           selectedAccount
-        );
+        ).catch((error) => {
+          console.log("Error transferring USDT with referral:", error.message);
+          toast.error(
+            "Error transferring USDT with referral: " + error.message
+          );
+        });
       } else {
         console.log("calling2");
-        await transferUSDT(recipient, amount, newProvider, selectedAccount);
+        await transferUSDT(
+          recipient,
+          amount,
+          newProvider,
+          selectedAccount
+        ).catch((error) => {
+          console.log("Error transferring USDT:", error.message);
+          toast.error("Error transferring USDT: " + error.message);
+        });
       }
 
       const transactionDetails = {
@@ -196,7 +215,7 @@ const BuyNodeComponent = () => {
     try {
       // Make an API call to your backend server to store the transaction details
       const response = await axios.post(
-        "http://152.67.7.210:9090/v1/xbr/usdt-transaction",
+        `${process.env.REACT_APP_USDT_TRANSACTION_API}`,
         transactionDetails
       );
       console.log("Transaction details stored successfully:", response.data);
@@ -235,13 +254,15 @@ const BuyNodeComponent = () => {
     }));
   };
 
-  // API FUNCTION FOR VERIFY-REFERAL-WALLET
+  // const referalWalletUrl = process.env.REACT_APP_VERIFY_REFERRAL_WALLET_API;
+  // console.log(referalWalletUrl);
+
   const verifyReferralWallet = async (referralAddress) => {
     console.log(referralAddress);
     try {
       // Make POST request to the verify-referral-wallet endpoint
       const response = await axios.post(
-        "http://152.67.7.210:9090/v1/xbr/verify-referral-wallet",
+        `${process.env.VERIFY_REFERRAL_WALLET_API}`,
         {
           referralWalletAddress: referralAddress,
         }
@@ -667,7 +688,7 @@ const BuyNodeComponent = () => {
                         transform="translate(-415.184 -336.42)"
                         fill={dark} // Pass the fill color dynamically
                         fillRule="evenodd"
-                        />
+                      />
                     </g>
                   </svg>
                 }

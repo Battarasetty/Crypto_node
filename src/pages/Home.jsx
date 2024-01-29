@@ -34,6 +34,8 @@ const Home = () => {
     (state) => state.wallet
   );
 
+  // console.log(account)
+
   // console.log(selectedWallet)
 
   const handleChange = (event, newValue) => {
@@ -156,9 +158,9 @@ const Home = () => {
     try {
       // Make a POST request to the mint endpoint
       const response = await axios.post(
-        "http://152.67.7.210:9090/v1/xbr/mint",
+        `${process.env.REACT_APP_MINT_API}`,
         {
-          toAddress: "0xA4411CeA4c282E2Ae74e74F2188828616737E89B",
+          toAddress: account,
           quantity: 1,
         }
       );

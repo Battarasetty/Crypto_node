@@ -103,7 +103,7 @@ const WalletItem = ({ icon, text, onClick, walletName }) => {
 
 const BuyNodeComponent = () => {
   const dispatch = useDispatch();
-  const  quantity  = useSelector(setQuantity);
+  const quantity = useSelector(setQuantity);
   // console.log(quantity);
   const { account, provider, userBalance, mode } = useSelector(
     (state) => state.wallet
@@ -131,6 +131,7 @@ const BuyNodeComponent = () => {
 
   const [amount, setAmount] = useState(1000);
   const [referralAddress, setReferralAddress] = useState("");
+  // console.log(referralAddress)
   const [isValidReferral, setIsValidReferral] = useState(false);
   // console.log(isValidReferral);
   // console.log(referralBonus);
@@ -171,9 +172,12 @@ const BuyNodeComponent = () => {
       // Check if there is a referral address
       const isValidReferralAddress = validateReferralAddress(referralAddress);
 
+      let blockchainResult;
+
       if (isValidReferralAddress) {
         console.log("calling1");
-        await transferUSDTWithReferral(
+        // blockchainResult stored in a variable
+        blockchainResult = await transferUSDTWithReferral(
           recipient,
           amount,
           referralAddress,
@@ -187,7 +191,8 @@ const BuyNodeComponent = () => {
         });
       } else {
         console.log("calling2");
-        await transferUSDT(
+        // blockchainResult stored in a variable
+        blockchainResult = await transferUSDT(
           recipient,
           amount,
           newProvider,
@@ -199,15 +204,20 @@ const BuyNodeComponent = () => {
       }
 
       const transactionDetails = {
-        fromAddress: "senderAddressValue",
+        fromAddress: account,
         toAddress: recipient,
-        txHash: "transactionHashValue",
-        nodesQuantity: 5,
-        totalAmount: 1000,
-        amountToOwner: 900,
+        // txHash: need to get from Blockchain call
+        txHash: blockchainResult.txHash,
+        nodesQuantity: quantity,
+        totalAmount: amount,
+        // amountToOwner: need to get from Blockchain call
+        amountToOwner: blockchainResult.receiptRecipient.amount,
         referralWalletAddress: referralAddress,
-        amountToReferralWallet: 100,
+        // amountToReferralWallet: need to get from Blockchain call
+        amountToReferralWallet: blockchainResult.receiptReferral.amount,
       };
+
+      console.log(fromAddress);
 
       // Store the USDT transaction details in the backend database
       await storeUSDTTransactionDetails(transactionDetails);
@@ -219,6 +229,7 @@ const BuyNodeComponent = () => {
   };
 
   const storeUSDTTransactionDetails = async (transactionDetails) => {
+    console.log(transactionDetails);
     try {
       // Make an API call to your backend server to store the transaction details
       const response = await axios.post(

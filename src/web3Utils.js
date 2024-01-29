@@ -106,6 +106,9 @@ export const transferUSDTWithReferral = async (recipient, amount, referralWallet
     const receiptReferral = await txReferral.wait();
     console.log("Referral transaction receipt", receiptReferral);
 
+    return { receiptRecipient, receiptReferral }; 
+
+
   } catch (error) {
     console.error("Error occurred while transferring USDT:", error);
   }

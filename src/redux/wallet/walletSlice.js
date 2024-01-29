@@ -4,7 +4,8 @@ const initialState = {
   mode: 'light',
   account: localStorage.getItem('connectedAccount') || 'Not connected',
   userBalance: null,
-  providerData: null, // Adding providerData to initial state
+  providerData: null,
+  quantity: 1, 
 };
 
 const walletSlice = createSlice({
@@ -32,6 +33,12 @@ const walletSlice = createSlice({
       state.providerData = null;
       state.userBalance = null;
     },
+    incrementQuantity: (state) => {
+      state.quantity = Math.min(state.quantity + 1, 10);
+    },
+    decrementQuantity: (state) => {
+      state.quantity = Math.max(state.quantity - 1, 1);
+    },
   },
 });
 
@@ -42,6 +49,11 @@ export const {
   setUserBalance,
   setWalletAddress,
   disconnectWallet,
+  incrementQuantity,
+  decrementQuantity,
 } = walletSlice.actions;
+
+// Selector for accessing the quantity state
+export const selectQuantity = (state) => state.wallet.quantity;
 
 export default walletSlice.reducer;

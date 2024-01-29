@@ -7,15 +7,15 @@ const quantitySlice = createSlice({
   },
   reducers: {
     increment: (state) => {
-      state.value = Math.min(state.value + 1, 10);
+      return { ...state, value: Math.min(state.value + 1, 10) }; // Returning a new state object
     },
     decrement: (state) => {
-      state.value = Math.max(state.value - 1, 1);
+      return { ...state, value: Math.max(state.value - 1, 1) }; // Returning a new state object
     },
   },
 });
 
 export const { increment, decrement } = quantitySlice.actions;
-export const setQuantity = (state) => state.quantity.value;
+export const setQuantity = (state) => state.quantity.value; // Renamed to selectQuantity
 
 export default quantitySlice.reducer;
